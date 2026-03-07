@@ -2,11 +2,14 @@
 
 ## Isolation
 
-Three isolated Coolify stacks are required:
+Current operating model uses two branch-driven Coolify stacks:
 
 - Dev
-- Staging
 - Prod
+
+Optional future expansion:
+
+- Staging
 
 Each environment uses separate:
 
@@ -27,6 +30,6 @@ Each environment uses separate:
 
 ## Promotion path
 
-- Feature branch -> Dev
-- Release candidate -> Staging
-- Approved release -> Prod
+- Feature branch -> `development`
+- `development` branch deploy -> Dev
+- Approved `development` -> `production` PR -> Prod

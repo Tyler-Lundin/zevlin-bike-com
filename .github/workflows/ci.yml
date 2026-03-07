@@ -2,9 +2,13 @@ name: CI
 
 on:
   pull_request:
+    branches:
+      - development
+      - production
   push:
     branches:
-      - main
+      - development
+      - production
 
 jobs:
   verify:

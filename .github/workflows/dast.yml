@@ -8,10 +8,10 @@ on:
 jobs:
   zap-baseline:
     runs-on: ubuntu-latest
-    if: ${{ secrets.STAGING_BASE_URL != '' }}
+    if: ${{ secrets.DEVELOPMENT_BASE_URL != '' || secrets.STAGING_BASE_URL != '' }}
     steps:
       - name: OWASP ZAP Baseline
         uses: zaproxy/action-baseline@v0.12.0
         with:
-          target: ${{ secrets.STAGING_BASE_URL }}
+          target: ${{ secrets.DEVELOPMENT_BASE_URL || secrets.STAGING_BASE_URL }}
           rules_file_name: ".zap/rules.tsv"
