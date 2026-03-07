@@ -120,8 +120,8 @@ class EnvKeyProvider implements KeyProvider {
   public readonly keyId: string;
 
   constructor() {
-    const env = getEnv();
-    this.keyId = env.KMS_KEY_ID ?? "local-kms-emulation";
+    // Avoid validating the full runtime env during module evaluation.
+    this.keyId = process.env.KMS_KEY_ID?.trim() || "local-kms-emulation";
   }
 
   getKey(): Buffer {
