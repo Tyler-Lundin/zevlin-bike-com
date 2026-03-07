@@ -1,0 +1,43 @@
+{
+  "name": "zevlin-monorepo",
+  "private": true,
+  "packageManager": "pnpm@10.4.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "node ./scripts/dev.mjs",
+    "migrate:inventory:legacy": "node ./scripts/migrations/extract-old-website-inventory.mjs",
+    "dev:raw": "turbo run dev --parallel",
+    "dev:wizard": "node ./scripts/dev.mjs --wizard-only --force-wizard",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "test:blocks": "bash ./scripts/test-blocks/run-all.sh",
+    "test:block:1": "bash ./scripts/test-blocks/tb01-repo-structure.sh",
+    "test:block:2": "bash ./scripts/test-blocks/tb02-public-apis.sh",
+    "test:block:3": "bash ./scripts/test-blocks/tb03-db-security.sh",
+    "test:block:4": "bash ./scripts/test-blocks/tb04-http-smoke.sh",
+    "test:block:5": "bash ./scripts/test-blocks/tb05-security-static.sh",
+    "test:block:6": "bash ./scripts/test-blocks/tb06-api-surfaces.sh",
+    "test:block:7": "bash ./scripts/test-blocks/tb07-self-hosted-config.sh",
+    "test:block:9": "bash ./scripts/test-blocks/tb09-rate-limit-abuse.sh",
+    "test:block:8": "bash ./scripts/test-blocks/tb08-platform-runtime.sh",
+    "platform:up": "bash ./scripts/platform/dev-up.sh",
+    "platform:down": "bash ./scripts/platform/dev-down.sh",
+    "platform:health": "bash ./scripts/platform/health-check.sh",
+    "typecheck": "turbo run typecheck",
+    "security": "bash ./scripts/security-check.sh",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "@types/pg": "^8.15.5",
+    "eslint": "^9.34.0",
+    "eslint-config-next": "^15.4.1",
+    "prettier": "^3.5.3",
+    "turbo": "^2.5.6",
+    "typescript": "^5.9.2"
+  }
+}

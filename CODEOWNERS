@@ -1,0 +1,9 @@
+# Global ownership
+* @zevlin-eng
+
+# Security-critical areas
+/packages/auth/ @zevlin-security
+/packages/security/ @zevlin-security
+/packages/db/ @zevlin-security
+/docs/policies/ @zevlin-security
+/docs/compliance/ @zevlin-security

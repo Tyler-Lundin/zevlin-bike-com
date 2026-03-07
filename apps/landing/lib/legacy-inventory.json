@@ -1,0 +1,741 @@
+{
+  "generatedAt": "2026-03-05T19:51:43.295Z",
+  "sourceRoot": "apps/old_website",
+  "routeInventory": {
+    "pages": [
+      {
+        "route": "/",
+        "category": "marketing",
+        "file": "apps/old_website/app/page.tsx"
+      },
+      {
+        "route": "/about",
+        "category": "marketing",
+        "file": "apps/old_website/app/about/page.tsx"
+      },
+      {
+        "route": "/admin",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/page.tsx"
+      },
+      {
+        "route": "/admin/announcements",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/announcements/page.tsx"
+      },
+      {
+        "route": "/admin/announcements/edit/[id]",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/announcements/edit/[id]/page.tsx"
+      },
+      {
+        "route": "/admin/announcements/new",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/announcements/new/page.tsx"
+      },
+      {
+        "route": "/admin/blog",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/blog/page.tsx"
+      },
+      {
+        "route": "/admin/blog/edit/[id]",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/blog/edit/[id]/page.tsx"
+      },
+      {
+        "route": "/admin/blog/new",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/blog/new/page.tsx"
+      },
+      {
+        "route": "/admin/customers",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/customers/page.tsx"
+      },
+      {
+        "route": "/admin/fulfillment",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/fulfillment/page.tsx"
+      },
+      {
+        "route": "/admin/newsletter",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/newsletter/page.tsx"
+      },
+      {
+        "route": "/admin/newsletter/edit/[id]",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/newsletter/edit/[id]/page.tsx"
+      },
+      {
+        "route": "/admin/newsletter/new",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/newsletter/new/page.tsx"
+      },
+      {
+        "route": "/admin/order/[orderId]",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/order/[orderId]/page.tsx"
+      },
+      {
+        "route": "/admin/orders",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/orders/page.tsx"
+      },
+      {
+        "route": "/admin/products",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/products/page.tsx"
+      },
+      {
+        "route": "/admin/settings",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/settings/page.tsx"
+      },
+      {
+        "route": "/admin/settings/packages",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/settings/packages/page.tsx"
+      },
+      {
+        "route": "/admin/settings/store",
+        "category": "admin",
+        "file": "apps/old_website/app/admin/settings/store/page.tsx"
+      },
+      {
+        "route": "/auth/callback",
+        "category": "auth",
+        "file": "apps/old_website/app/auth/callback/page.tsx"
+      },
+      {
+        "route": "/auth/create-profile",
+        "category": "auth",
+        "file": "apps/old_website/app/auth/create-profile/page.tsx"
+      },
+      {
+        "route": "/auth/forgot-password",
+        "category": "auth",
+        "file": "apps/old_website/app/auth/forgot-password/page.tsx"
+      },
+      {
+        "route": "/auth/login",
+        "category": "auth",
+        "file": "apps/old_website/app/auth/login/page.tsx"
+      },
+      {
+        "route": "/auth/register",
+        "category": "auth",
+        "file": "apps/old_website/app/auth/register/page.tsx"
+      },
+      {
+        "route": "/auth/reset-password",
+        "category": "auth",
+        "file": "apps/old_website/app/auth/reset-password/page.tsx"
+      },
+      {
+        "route": "/auth/verify-email",
+        "category": "auth",
+        "file": "apps/old_website/app/auth/verify-email/page.tsx"
+      },
+      {
+        "route": "/blog",
+        "category": "marketing",
+        "file": "apps/old_website/app/blog/page.tsx"
+      },
+      {
+        "route": "/blog/[slug]",
+        "category": "marketing",
+        "file": "apps/old_website/app/blog/[slug]/page.tsx"
+      },
+      {
+        "route": "/cart",
+        "category": "commerce",
+        "file": "apps/old_website/app/cart/page.tsx"
+      },
+      {
+        "route": "/checkout",
+        "category": "commerce",
+        "file": "apps/old_website/app/checkout/page.tsx"
+      },
+      {
+        "route": "/contact",
+        "category": "marketing",
+        "file": "apps/old_website/app/contact/page.tsx"
+      },
+      {
+        "route": "/events",
+        "category": "marketing",
+        "file": "apps/old_website/app/events/page.tsx"
+      },
+      {
+        "route": "/faq",
+        "category": "marketing",
+        "file": "apps/old_website/app/faq/page.tsx"
+      },
+      {
+        "route": "/mission",
+        "category": "marketing",
+        "file": "apps/old_website/app/mission/page.tsx"
+      },
+      {
+        "route": "/order/[orderId]",
+        "category": "commerce",
+        "file": "apps/old_website/app/order/[orderId]/page.tsx"
+      },
+      {
+        "route": "/orders",
+        "category": "commerce",
+        "file": "apps/old_website/app/orders/page.tsx"
+      },
+      {
+        "route": "/privacy",
+        "category": "marketing",
+        "file": "apps/old_website/app/privacy/page.tsx"
+      },
+      {
+        "route": "/products",
+        "category": "marketing",
+        "file": "apps/old_website/app/products/page.tsx"
+      },
+      {
+        "route": "/returns",
+        "category": "marketing",
+        "file": "apps/old_website/app/returns/page.tsx"
+      },
+      {
+        "route": "/shipping",
+        "category": "marketing",
+        "file": "apps/old_website/app/shipping/page.tsx"
+      }
+    ],
+    "apiRoutes": [
+      {
+        "route": "/api/admin/orders/[orderId]",
+        "file": "apps/old_website/app/api/admin/orders/[orderId]/route.ts"
+      },
+      {
+        "route": "/api/admin/orders/[orderId]/refund",
+        "file": "apps/old_website/app/api/admin/orders/[orderId]/refund/route.ts"
+      },
+      {
+        "route": "/api/admin/orders/[orderId]/shipments",
+        "file": "apps/old_website/app/api/admin/orders/[orderId]/shipments/route.ts"
+      },
+      {
+        "route": "/api/shipping/labels",
+        "file": "apps/old_website/app/api/shipping/labels/route.ts"
+      },
+      {
+        "route": "/api/shipping/labels/void",
+        "file": "apps/old_website/app/api/shipping/labels/void/route.ts"
+      },
+      {
+        "route": "/api/shipping/packages",
+        "file": "apps/old_website/app/api/shipping/packages/route.ts"
+      },
+      {
+        "route": "/api/shipping/rates",
+        "file": "apps/old_website/app/api/shipping/rates/route.ts"
+      },
+      {
+        "route": "/api/shipping/validate-address",
+        "file": "apps/old_website/app/api/shipping/validate-address/route.ts"
+      },
+      {
+        "route": "/api/webhooks/shippo",
+        "file": "apps/old_website/app/api/webhooks/shippo/route.ts"
+      }
+    ],
+    "counts": {
+      "totalPages": 41,
+      "marketingPages": 12,
+      "commercePages": 4,
+      "authPages": 7,
+      "adminPages": 18,
+      "apiRoutes": 9
+    }
+  },
+  "metadata": {
+    "title": "Zevlin Bike - Goods for your goods",
+    "description": "The ultimate cream to keep you riding better, harder, and longer."
+  },
+  "navigation": {
+    "desktop": [
+      {
+        "href": "/",
+        "label": "Home"
+      },
+      {
+        "href": "/products",
+        "label": "Products"
+      },
+      {
+        "href": "/about",
+        "label": "About"
+      },
+      {
+        "href": "/contact",
+        "label": "Contact"
+      },
+      {
+        "href": "/faq",
+        "label": "FAQ"
+      },
+      {
+        "href": "/blog",
+        "label": "Blog"
+      }
+    ],
+    "footerColumns": [
+      {
+        "title": "Products",
+        "links": [
+          {
+            "label": "Chamois Cream",
+            "href": "/products?category=cream"
+          },
+          {
+            "label": "Cycling Apparel",
+            "href": "/products?category=apparel"
+          },
+          {
+            "label": "Limited Drops",
+            "href": "/products?category=limited"
+          }
+        ]
+      },
+      {
+        "title": "Support",
+        "links": [
+          {
+            "label": "Contact Us",
+            "href": "/contact"
+          },
+          {
+            "label": "FAQ",
+            "href": "/faq"
+          },
+          {
+            "label": "Shipping Info",
+            "href": "/shipping"
+          },
+          {
+            "label": "Returns",
+            "href": "/returns"
+          }
+        ]
+      },
+      {
+        "title": "Company",
+        "links": [
+          {
+            "label": "About Zevlin",
+            "href": "/about"
+          },
+          {
+            "label": "Our Mission",
+            "href": "/mission"
+          },
+          {
+            "label": "Privacy Policy",
+            "href": "/privacy"
+          }
+        ]
+      },
+      {
+        "title": "🤫",
+        "links": [
+          {
+            "label": "Admin",
+            "href": "/admin"
+          }
+        ]
+      },
+      {
+        "title": "Account",
+        "links": [
+          {
+            "label": "Login",
+            "href": "/auth/login"
+          },
+          {
+            "label": "Register",
+            "href": "/auth/register"
+          },
+          {
+            "label": "Forgot Password",
+            "href": "/auth/forgot-password"
+          }
+        ]
+      }
+    ]
+  },
+  "data": {
+    "products": [
+      {
+        "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11",
+        "name": "Crack Chamois Cream",
+        "description": "Crack is our natural, non-tingle chamois cream formula designed for both the cooler riding days and for those who do not really need or want an extra kick in the chamois while they ride. Our crack chamois cream creates a comfortable barrier using tea tree leaf oil, electric daisy extract and organic witch hazel extract. All of which keep you soothed and protected so all you have to do is ride.",
+        "priceCents": 2399,
+        "slug": "crack-chamois-cream"
+      },
+      {
+        "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a12",
+        "name": "Super Crack Chamois Cream",
+        "description": "SuperCrack has the slightly tingly, cooling properties of peppermint oil, electric daisy extract and organic witch hazel extract added to our Crack formula, giving riders and their bits some extra relief when the temps are rising outside and inside their shorts during a workout, leaving them feeling minty fresh when the ride is done. Help you enjoy your ride from start to finish day after day.",
+        "priceCents": 2399,
+        "slug": "super-crack-chamois-cream"
+      },
+      {
+        "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a13",
+        "name": "BYOT Fitness Wash",
+        "description": "No shower? No problem. Spray yourself down post-ride to clean up with just a towel. BYOT is your on-the-go refresh solution.",
+        "priceCents": 1499,
+        "slug": "byot-fitness-wash"
+      },
+      {
+        "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a14",
+        "name": "BYOT Towel",
+        "description": "Bring Your Own Towel. Compact, absorbent, and ready to get you cleaned up after a ride when a shower's out of reach.",
+        "priceCents": 299,
+        "slug": "byot-towel"
+      },
+      {
+        "id": "a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a15",
+        "name": "Zevlin Gaiter",
+        "description": "Multi-use microfiber gaiter: neck warmer, face shield, headband—or show off your Zevlin style however you wear it.",
+        "priceCents": 999,
+        "slug": "zevlin-gaiter"
+      }
+    ],
+    "testimonials": [
+      {
+        "name": "Adriana",
+        "title": "Cyclist",
+        "initials": "AD",
+        "quote": "This product will make your bike rides all about the rides — buh-bye chaffing, funny walking, and screaming in the shower.",
+        "rating": 5,
+        "bgColor": "bg-blue-600"
+      },
+      {
+        "name": "B T Poremski",
+        "title": "Verified Owner",
+        "initials": "BP",
+        "quote": "I've been using Zevlin Crack for about two years after trying multiple brands. Natural ingredients are a must for my skin and hygiene. Works best on both skin and chamois seams. Shipping is always prompt—this is now my go-to.",
+        "rating": 5,
+        "bgColor": "bg-green-600"
+      },
+      {
+        "name": "Dan",
+        "title": "Verified Owner",
+        "initials": "DA",
+        "quote": "Lasts nearly twice as long as yellow & purple stuff. No smell. 2oz pots are perfect for travel.",
+        "rating": 5,
+        "bgColor": "bg-purple-600"
+      },
+      {
+        "name": "Glenn",
+        "title": "Industry Veteran",
+        "initials": "GL",
+        "quote": "Zevlin chamois cream is simply the best! After 20 years in the bike industry, I've tried nearly every brand. Zevlin is by far the best.",
+        "rating": 5,
+        "bgColor": "bg-yellow-600"
+      },
+      {
+        "name": "Travis",
+        "title": "Cat 2 Crit Racer",
+        "initials": "TR",
+        "quote": "Far better than anything else I’ve used. Riding 8 years—last 3 I’ve only used Zevlin Crack (non-tingle). Maybe I shouldn't give such good reviews—it's sold out and I need more 🙁",
+        "rating": 5,
+        "bgColor": "bg-red-600"
+      },
+      {
+        "name": "Mark Kleinman",
+        "title": "Verified Owner",
+        "initials": "MK",
+        "quote": "Easy to apply, lasts for hours, and works better than any other brand I’ve tried. Quick shipping too.",
+        "rating": 5,
+        "bgColor": "bg-blue-500"
+      },
+      {
+        "name": "Solid Saddle Sore Suppression",
+        "title": "Verified Owner",
+        "initials": "SS",
+        "quote": "Thicker than others, which makes it last longer. I enjoy the subtle tingle but rely on it for endurance.",
+        "rating": 5,
+        "bgColor": "bg-green-600"
+      },
+      {
+        "name": "Ken",
+        "title": "Verified Owner",
+        "initials": "KE",
+        "quote": "Product is fantastic and highly recommended.",
+        "rating": 5,
+        "bgColor": "bg-purple-500"
+      },
+      {
+        "name": "Tony",
+        "title": "Verified Owner",
+        "initials": "TO",
+        "quote": "Does the trick, especially when riding in the heat. No more saddle sores—just smooth rides.",
+        "rating": 5,
+        "bgColor": "bg-yellow-600"
+      },
+      {
+        "name": "Etienne",
+        "title": "Verified Owner",
+        "initials": "ET",
+        "quote": "Tried dozens of creams over the years—Super Crack is now my go-to. Worth the price for comfort.",
+        "rating": 5,
+        "bgColor": "bg-red-500"
+      },
+      {
+        "name": "Kirk",
+        "title": "Verified Owner",
+        "initials": "KI",
+        "quote": "New to Zevlin, but so far the tingle is perfect. One application held strong for 30+ miles.",
+        "rating": 5,
+        "bgColor": "bg-pink-600"
+      },
+      {
+        "name": "Scott McClave",
+        "title": "Verified Owner",
+        "initials": "SM",
+        "quote": "BWR 2021, 7+ hours, 115°F—legs were sore, not the saddle. Super Crack passed the test.",
+        "rating": 5,
+        "bgColor": "bg-orange-600"
+      },
+      {
+        "name": "Mitch",
+        "title": "Verified Owner",
+        "initials": "MI",
+        "quote": "From 30 min spins to 28hr slogs, Super Crack just works. Heat, rain, mud—no problem.",
+        "rating": 5,
+        "bgColor": "bg-cyan-600"
+      },
+      {
+        "name": "Lane",
+        "title": "Verified Owner",
+        "initials": "LA",
+        "quote": "Zwift rides were causing sores—Super Crack solved it. Works better than anything I’ve used.",
+        "rating": 5,
+        "bgColor": "bg-teal-500"
+      },
+      {
+        "name": "Jacob",
+        "title": "Verified Owner",
+        "initials": "JA",
+        "quote": "Tried chamois cream for the first time—finished my 8oz tub and came back for more. This is the one.",
+        "rating": 5,
+        "bgColor": "bg-indigo-600"
+      }
+    ],
+    "forms": [
+      {
+        "formId": "newsletter-signup",
+        "routeContext": "/ (home sections)",
+        "sourceFile": "apps/old_website/app/components/Newsletter.tsx",
+        "fields": [
+          "email"
+        ],
+        "submissionPath": "server action signUp -> table newsletter_signups"
+      },
+      {
+        "formId": "contact-form",
+        "routeContext": "/contact",
+        "sourceFile": "apps/old_website/app/contact/page.tsx",
+        "fields": [
+          "name",
+          "email",
+          "subject",
+          "message"
+        ],
+        "submissionPath": "client-only alert flow (no backend persistence)"
+      },
+      {
+        "formId": "returns-form",
+        "routeContext": "/returns",
+        "sourceFile": "apps/old_website/app/returns/page.tsx",
+        "fields": [
+          "orderNumber",
+          "name",
+          "email",
+          "message"
+        ],
+        "submissionPath": "client-only alert flow (no backend persistence)"
+      }
+    ]
+  },
+  "assets": {
+    "oldWebsitePublicFiles": [
+      {
+        "path": "/file.svg",
+        "sourceFile": "apps/old_website/public/file.svg"
+      },
+      {
+        "path": "/globe.svg",
+        "sourceFile": "apps/old_website/public/globe.svg"
+      },
+      {
+        "path": "/images/about-hero-image.png",
+        "sourceFile": "apps/old_website/public/images/about-hero-image.png"
+      },
+      {
+        "path": "/images/hero-image.jpeg",
+        "sourceFile": "apps/old_website/public/images/hero-image.jpeg"
+      },
+      {
+        "path": "/images/hero-image.png",
+        "sourceFile": "apps/old_website/public/images/hero-image.png"
+      },
+      {
+        "path": "/images/logo.png",
+        "sourceFile": "apps/old_website/public/images/logo.png"
+      },
+      {
+        "path": "/images/mission-hero-image.jpeg",
+        "sourceFile": "apps/old_website/public/images/mission-hero-image.jpeg"
+      },
+      {
+        "path": "/window.svg",
+        "sourceFile": "apps/old_website/public/window.svg"
+      }
+    ],
+    "landingPublicFiles": [
+      "/file.svg",
+      "/globe.svg",
+      "/images/about-hero-image.png",
+      "/images/hero-image.jpeg",
+      "/images/hero-image.png",
+      "/images/logo.png",
+      "/images/mission-hero-image.jpeg",
+      "/window.svg"
+    ],
+    "missingInLanding": [],
+    "referencedImages": [
+      "/images/about-hero-image.png",
+      "/images/owner-0.png",
+      "/images/mission-hero-image.jpeg",
+      "/images/hero-image.jpeg",
+      "/images/hero-image.png"
+    ],
+    "missingSourceImageFiles": [
+      "/images/owner-0.png"
+    ]
+  },
+  "integrations": [
+    {
+      "name": "Supabase",
+      "files": [
+        "apps/old_website/README-shippo.md",
+        "apps/old_website/README.md",
+        "apps/old_website/TODO.md",
+        "apps/old_website/app/admin/actions.ts",
+        "apps/old_website/app/admin/announcements/actions.ts",
+        "apps/old_website/app/admin/blog/actions.ts",
+        "apps/old_website/app/admin/blog/edit/[id]/page.tsx",
+        "apps/old_website/app/admin/customers/actions.ts",
+        "apps/old_website/app/admin/fulfillment/page.tsx",
+        "apps/old_website/app/admin/layout.tsx",
+        "apps/old_website/app/admin/newsletter/actions.ts",
+        "apps/old_website/app/admin/orders/actions.ts",
+        "apps/old_website/app/admin/products/actions.ts",
+        "apps/old_website/app/admin/settings/packages/actions.ts",
+        "apps/old_website/app/admin/settings/store/actions.ts",
+        "apps/old_website/app/api/admin/orders/[orderId]/refund/route.ts",
+        "apps/old_website/app/api/admin/orders/[orderId]/route.ts",
+        "apps/old_website/app/api/admin/orders/[orderId]/shipments/route.ts",
+        "apps/old_website/app/api/shipping/labels/route.ts",
+        "apps/old_website/app/api/shipping/labels/void/route.ts"
+      ],
+      "fileCount": 50
+    },
+    {
+      "name": "Shippo",
+      "files": [
+        "apps/old_website/README-shippo.md",
+        "apps/old_website/TODO.md",
+        "apps/old_website/app/api/shipping/labels/route.ts",
+        "apps/old_website/app/api/shipping/labels/void/route.ts",
+        "apps/old_website/app/api/shipping/rates/route.ts",
+        "apps/old_website/app/api/shipping/validate-address/route.ts",
+        "apps/old_website/app/api/webhooks/shippo/route.ts",
+        "apps/old_website/app/checkout/actions.ts",
+        "apps/old_website/db/migrations/0006_shippo_shipping.sql",
+        "apps/old_website/lib/env.ts",
+        "apps/old_website/lib/shippo.ts",
+        "apps/old_website/types/shippo.d.ts"
+      ],
+      "fileCount": 12
+    },
+    {
+      "name": "Newsletter Signups",
+      "files": [
+        "apps/old_website/app/admin/newsletter/actions.ts",
+        "apps/old_website/app/newsletter/actions.ts",
+        "apps/old_website/db/migrations/0011_add_remaining_rls.sql",
+        "apps/old_website/db/migrations/0015_allow_newsletter_signups_insert.sql",
+        "apps/old_website/db/migrations/initial.schema.sql"
+      ],
+      "fileCount": 5
+    },
+    {
+      "name": "Brevo Email",
+      "files": [
+        "apps/old_website/app/admin/newsletter/actions.ts",
+        "apps/old_website/app/api/admin/orders/[orderId]/refund/route.ts",
+        "apps/old_website/app/api/shipping/labels/route.ts",
+        "apps/old_website/app/checkout/actions.ts",
+        "apps/old_website/lib/brevo.ts"
+      ],
+      "fileCount": 5
+    }
+  ],
+  "parity": {
+    "landingRoutes": [
+      "/",
+      "/api/analytics/event",
+      "/api/contact",
+      "/api/health",
+      "/api/newsletter/signup",
+      "/api/returns",
+      "/contact",
+      "/faq",
+      "/privacy",
+      "/returns",
+      "/shipping"
+    ],
+    "marketingRoutesFromOldWebsite": [
+      "/",
+      "/about",
+      "/blog",
+      "/blog/[slug]",
+      "/contact",
+      "/events",
+      "/faq",
+      "/mission",
+      "/privacy",
+      "/products",
+      "/returns",
+      "/shipping"
+    ],
+    "marketingRoutesCollapsedIntoLandingHome": [
+      "/",
+      "/about",
+      "/blog",
+      "/blog/[slug]",
+      "/contact",
+      "/events",
+      "/faq",
+      "/mission",
+      "/privacy",
+      "/products",
+      "/returns",
+      "/shipping"
+    ],
+    "marketingRoutesNotRepresentedInLanding": [
+      "/blog/[slug]"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "@zevlin/auth",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "echo 'lint @zevlin/auth'",
+    "test": "echo 'test @zevlin/auth'",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@zevlin/config": "workspace:*",
+    "@zevlin/contracts": "workspace:*",
+    "@zevlin/db": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
