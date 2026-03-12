@@ -11,14 +11,20 @@ import {
 } from "../../lib/productPresentation";
 
 function renderHeadline(headline: string): ReactNode {
-  const parts = headline.split(/for your/i);
-  if (parts.length !== 2) {
+  const match = headline.match(/^(.*?)(for your)(.*)$/i);
+  if (!match) {
     return headline;
   }
 
+  const [, lead, connector, tail] = match;
+
   return (
     <>
-      {parts[0].trimEnd()} <span>for your</span> {parts[1].trimStart()}
+      <span className="hero-headline-line hero-headline-line-primary">{lead.trim()}</span>
+      <span className="hero-headline-line hero-headline-line-connector">{connector}</span>
+      <span className="hero-headline-line hero-headline-line-primary hero-headline-line-secondary">
+        {tail.trim()}
+      </span>
     </>
   );
 }
@@ -116,8 +122,8 @@ export default function LandingHero({ content }: { content: LandingContent }) {
               <p className="stars">{"*".repeat(content.hero.microTestimonial.rating)}</p>
               <p className="hero-quote-copy">&ldquo;{content.hero.microTestimonial.quote}&rdquo;</p>
               <p className="hero-quote-byline">
-                {content.hero.microTestimonial.name}
-                <span>{content.hero.microTestimonial.title}</span>
+                <span className="hero-quote-name">{content.hero.microTestimonial.name}</span>
+                <span className="hero-quote-role">{content.hero.microTestimonial.title}</span>
               </p>
             </blockquote>
           </div>
