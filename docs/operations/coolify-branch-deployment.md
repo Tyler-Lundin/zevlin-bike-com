@@ -59,7 +59,7 @@ Commands:
 
 - Install: `corepack enable && pnpm install --frozen-lockfile`
 - Build: `pnpm --filter @zevlin/landing build`
-- Start: `pnpm --filter @zevlin/landing start -- -p ${PORT:-3001}`
+- Start: `pnpm --filter @zevlin/landing start`
 
 Domain suggestion:
 
@@ -77,7 +77,7 @@ Commands:
 
 - Install: `corepack enable && pnpm install --frozen-lockfile`
 - Build: `pnpm --filter @zevlin/landing build`
-- Start: `pnpm --filter @zevlin/landing start -- -p ${PORT:-3001}`
+- Start: `pnpm --filter @zevlin/landing start`
 
 Domain suggestion:
 
@@ -110,6 +110,7 @@ Development-specific:
 - `ENFORCE_SELF_HOSTED_REQUIRED=false`
 - `NEXT_PUBLIC_SITE_URL=https://dev.zevlinbike.com`
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID=<dev GA id or blank>`
+- Do not set `NODE_ENV=dev` or `NODE_ENV=development`; Next.js runtime should stay `production` in Coolify
 
 Production-specific:
 

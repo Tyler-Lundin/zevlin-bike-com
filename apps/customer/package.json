@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3004",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p ${PORT:-3004}",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "test": "echo \"No tests for @zevlin/customer yet\""
