@@ -89,6 +89,7 @@ export default function LandingHero({ content }: { content: LandingContent }) {
             sizes="100vw"
             className="hero-rider-image"
           />
+          <div className="hero-copy-scrim" />
           <div className="hero-dot-grid" />
           <div className="hero-wash hero-wash-left" />
           <div className="hero-wash hero-wash-right" />
@@ -97,7 +98,7 @@ export default function LandingHero({ content }: { content: LandingContent }) {
 
         <div className="hero-stage-grid">
           <div className="hero-copy-column">
-            <p className="eyebrow hero-eyebrow">{content.hero.eyebrow}</p>
+            <p className="hero-overline">{content.hero.eyebrow}</p>
             <h1 id="hero-heading" className="hero-headline">
               {renderHeadline(content.hero.headline)}
             </h1>
@@ -212,8 +213,8 @@ export default function LandingHero({ content }: { content: LandingContent }) {
         {trustRail.map((item) => (
           <Link key={item.href} href={item.href} className="trust-rail-card">
             <p className="trust-rail-eyebrow">{item.eyebrow}</p>
-            <h3>{item.title}</h3>
-            <p>{item.body}</p>
+            <h3 className="trust-rail-title">{item.title}</h3>
+            <p className="trust-rail-body">{item.body}</p>
           </Link>
         ))}
       </section>
