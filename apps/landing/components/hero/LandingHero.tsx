@@ -1,33 +1,13 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { LandingContent, LandingProduct } from "../../lib/content";
-
-function toUsd(priceCents: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(priceCents / 100);
-}
-
-function getShortDescription(description: string): string {
-  const normalized = description.replace(/\s+/g, " ").trim();
-  const firstSentence = normalized.match(/^(.+?[.!?])(?:\s|$)/)?.[1];
-  if (firstSentence) {
-    return firstSentence;
-  }
-
-  return normalized.length > 168 ? `${normalized.slice(0, 165).trimEnd()}...` : normalized;
-}
-
-function getProductMark(productName: string): string {
-  const mark = productName
-    .replace(/\b(Chamois|Cream|Fitness|Wash|Towel|Gaiter)\b/gi, "")
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return mark || productName;
-}
+import {
+  getProductMark,
+  getProductTone,
+  getShortDescription,
+  toUsd,
+} from "../../lib/productPresentation";
 
 function renderHeadline(headline: string): ReactNode {
   const parts = headline.split(/for your/i);
@@ -40,37 +20,6 @@ function renderHeadline(headline: string): ReactNode {
       {parts[0].trimEnd()} <span>for your</span> {parts[1].trimStart()}
     </>
   );
-}
-
-function getProductTone(slug: string): CSSProperties {
-  const toneMap: Record<string, { accent: string; accentStrong: string; glow: string }> = {
-    "crack-chamois-cream": {
-      accent: "#3cc7ff",
-      accentStrong: "#0e5f98",
-      glow: "rgba(60, 199, 255, 0.28)",
-    },
-    "super-crack-chamois-cream": {
-      accent: "#ffb347",
-      accentStrong: "#aa5f11",
-      glow: "rgba(255, 179, 71, 0.24)",
-    },
-    "byot-fitness-wash": {
-      accent: "#9dfbcb",
-      accentStrong: "#2d8960",
-      glow: "rgba(157, 251, 203, 0.22)",
-    },
-  };
-  const tone = toneMap[slug] ?? {
-    accent: "#8fc4ff",
-    accentStrong: "#31669c",
-    glow: "rgba(143, 196, 255, 0.22)",
-  };
-
-  return {
-    "--hero-accent": tone.accent,
-    "--hero-accent-strong": tone.accentStrong,
-    "--hero-glow": tone.glow,
-  } as CSSProperties;
 }
 
 function findProduct(products: LandingProduct[], slug: string): LandingProduct {
@@ -188,15 +137,30 @@ export default function LandingHero({ content }: { content: LandingContent }) {
               <div className="hero-product-vessel">
                 <div className="hero-product-orbit" />
                 <div className="hero-product-core">
-                  <Image
-                    src={content.logoPath}
-                    alt=""
-                    width={96}
-                    height={96}
-                    className="hero-product-logo"
-                  />
-                  <p className="hero-product-mark">{getProductMark(featuredProduct.name)}</p>
-                  <p className="hero-product-type">{featuredProduct.name}</p>
+                  <div className="hero-product-sticker">
+                    <Image
+                      src={content.logoPath}
+                      alt=""
+                      width={36}
+                      height={36}
+                      className="hero-product-logo"
+                    />
+                    <span>{featuredProduct.media.label}</span>
+                  </div>
+                  <div className="hero-product-image-frame">
+                    <Image
+                      src={featuredProduct.media.imagePath}
+                      alt={featuredProduct.media.imageAlt}
+                      fill
+                      priority
+                      sizes="(min-width: 1120px) 34vw, 92vw"
+                      className="hero-product-image"
+                    />
+                  </div>
+                  <div className="hero-product-caption">
+                    <p className="hero-product-mark">{getProductMark(featuredProduct.name)}</p>
+                    <p className="hero-product-type">{featuredProduct.name}</p>
+                  </div>
                 </div>
                 <span className="hero-price-tag">{toUsd(featuredProduct.priceCents)}</span>
               </div>
@@ -219,13 +183,24 @@ export default function LandingHero({ content }: { content: LandingContent }) {
                   className="hero-support-card"
                   style={getProductTone(product.slug)}
                 >
-                  <div className="hero-support-mark">{getProductMark(product.name)}</div>
+                  <div className="hero-support-visual">
+                    <Image
+                      src={product.media.imagePath}
+                      alt={product.media.imageAlt}
+                      fill
+                      sizes="(min-width: 1120px) 16vw, 90vw"
+                      className="hero-support-image"
+                    />
+                  </div>
                   <div className="hero-support-copy">
-                    <p className="hero-support-kicker">Also in the lineup</p>
+                    <p className="hero-support-kicker">{product.media.label}</p>
                     <h3>{product.name}</h3>
                     <p>{getShortDescription(product.description)}</p>
                   </div>
-                  <span className="hero-support-price">{toUsd(product.priceCents)}</span>
+                  <div className="hero-support-meta">
+                    <span className="hero-support-mark">{getProductMark(product.name)}</span>
+                    <span className="hero-support-price">{toUsd(product.priceCents)}</span>
+                  </div>
                 </Link>
               ))}
             </div>

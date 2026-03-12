@@ -11,6 +11,11 @@ export type LandingProduct = {
   description: string;
   priceCents: number;
   slug: string;
+  media: {
+    imagePath: string;
+    imageAlt: string;
+    label: string;
+  };
 };
 
 export type LandingFeature = {
@@ -153,7 +158,7 @@ type LegacyInventory = {
     pages: LegacyInventoryPage[];
   };
   data: {
-    products: LandingProduct[];
+    products: Array<Omit<LandingProduct, "media">>;
     testimonials: Array<LandingTestimonial & { initials: string; bgColor: string }>;
   };
   navigation: {
@@ -165,7 +170,41 @@ const legacyInventory = legacyInventoryData as LegacyInventory;
 const legacyMarketingRoutes = legacyInventory.routeInventory.pages
   .filter((page) => page.category === "marketing")
   .map((page) => page.route);
-const legacyProducts = legacyInventory.data.products;
+const productMediaBySlug: Record<LandingProduct["slug"], LandingProduct["media"]> = {
+  "crack-chamois-cream": {
+    imagePath: "/images/products/crack-chamois-cream.svg",
+    imageAlt: "Mock Zevlin poster art for Crack Chamois Cream",
+    label: "Natural / non-tingle",
+  },
+  "super-crack-chamois-cream": {
+    imagePath: "/images/products/super-crack-chamois-cream.svg",
+    imageAlt: "Mock Zevlin poster art for Super Crack Chamois Cream",
+    label: "Cooling / race-day",
+  },
+  "byot-fitness-wash": {
+    imagePath: "/images/products/byot-fitness-wash.svg",
+    imageAlt: "Mock Zevlin poster art for BYOT Fitness Wash",
+    label: "Post-ride refresh",
+  },
+  "byot-towel": {
+    imagePath: "/images/products/byot-towel.svg",
+    imageAlt: "Mock Zevlin poster art for BYOT Towel",
+    label: "Pocket-size cleanup",
+  },
+  "zevlin-gaiter": {
+    imagePath: "/images/products/zevlin-gaiter.svg",
+    imageAlt: "Mock Zevlin poster art for Zevlin Gaiter",
+    label: "All-weather layer",
+  },
+};
+const legacyProducts: LandingProduct[] = legacyInventory.data.products.map((product) => ({
+  ...product,
+  media: productMediaBySlug[product.slug] ?? {
+    imagePath: "/images/products/crack-chamois-cream.svg",
+    imageAlt: `Mock Zevlin poster art for ${product.name}`,
+    label: "Ride-day essential",
+  },
+}));
 const legacyTestimonials: LandingTestimonial[] = legacyInventory.data.testimonials.map(
   (item) => ({
     name: item.name,

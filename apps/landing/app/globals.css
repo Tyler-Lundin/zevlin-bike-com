@@ -401,7 +401,7 @@ a {
 .hero-product-vessel {
   position: relative;
   min-height: 388px;
-  padding: 24px;
+  padding: 22px;
   border-radius: 36px;
   overflow: hidden;
   border: 1px solid rgba(236, 244, 252, 0.12);
@@ -437,33 +437,81 @@ a {
 .hero-product-core {
   position: relative;
   z-index: 1;
-  min-height: 340px;
   display: grid;
-  place-items: center;
-  align-content: center;
-  gap: 12px;
-  padding: 40px 24px;
+  gap: 14px;
+  padding: 20px;
   border-radius: 30px;
   background:
     radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.14), transparent 40%),
     linear-gradient(180deg, rgba(8, 18, 30, 0.64), rgba(14, 29, 46, 0.78));
 }
 
+.hero-product-sticker {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(8, 19, 31, 0.68);
+  border: 1px solid rgba(227, 236, 246, 0.12);
+}
+
 .hero-product-logo {
-  width: 88px;
-  height: 88px;
+  width: 36px;
+  height: 36px;
   object-fit: cover;
   opacity: 0.94;
+  border-radius: 10px;
+}
+
+.hero-product-sticker span {
+  color: rgba(235, 242, 248, 0.88);
+  font-size: 0.77rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-product-image-frame {
+  position: relative;
+  min-height: 280px;
+  border-radius: 28px;
+  overflow: hidden;
+  border: 1px solid rgba(230, 239, 250, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    radial-gradient(circle at 50% 16%, rgba(255, 255, 255, 0.12), transparent 50%);
+}
+
+.hero-product-image-frame::after {
+  content: "";
+  position: absolute;
+  inset: auto 12% 8% 12%;
+  height: 18%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.3), transparent 72%);
+  filter: blur(14px);
+}
+
+.hero-product-image {
+  object-fit: contain;
+  padding: 20px;
+  transform: scale(1.01);
+}
+
+.hero-product-caption {
+  display: grid;
+  gap: 4px;
 }
 
 .hero-product-mark {
   margin: 0;
-  max-width: 8ch;
-  text-align: center;
-  font-size: clamp(2.7rem, 6vw, 4.4rem);
+  max-width: 10ch;
+  font-size: clamp(1.6rem, 3vw, 2.45rem);
   line-height: 0.92;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #fff;
 }
@@ -544,7 +592,7 @@ a {
 .hero-support-card {
   position: relative;
   overflow: hidden;
-  min-height: 212px;
+  min-height: 268px;
   display: grid;
   align-content: start;
   gap: 12px;
@@ -570,6 +618,22 @@ a {
   border-radius: 50%;
   background: radial-gradient(circle, var(--hero-glow), transparent 70%);
   opacity: 0.9;
+}
+
+.hero-support-visual {
+  position: relative;
+  min-height: 140px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(230, 239, 248, 0.12);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.03)),
+    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.12), transparent 50%);
+}
+
+.hero-support-image {
+  object-fit: contain;
+  padding: 14px;
 }
 
 .hero-support-card:hover {
@@ -611,10 +675,17 @@ a {
   line-height: 1.55;
 }
 
-.hero-support-price {
+.hero-support-meta {
   position: relative;
   z-index: 1;
   margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.hero-support-price {
   font-weight: 700;
   color: #fff;
 }
@@ -810,6 +881,12 @@ h1 {
   gap: 7px;
 }
 
+.section-summary {
+  max-width: 62ch;
+  color: var(--ink-soft);
+  line-height: 1.58;
+}
+
 h2 {
   font-size: clamp(2.1rem, 4.9vw, 3.8rem);
   line-height: 0.94;
@@ -843,12 +920,90 @@ h4 {
 }
 
 .product-card {
+  position: relative;
+  overflow: hidden;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: var(--bg-panel-strong);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(244, 248, 252, 0.92)),
+    var(--bg-panel-strong);
   padding: 14px;
   display: grid;
+  gap: 12px;
+  box-shadow: 0 24px 44px -36px rgba(10, 27, 48, 0.42);
+}
+
+.product-card::before {
+  content: "";
+  position: absolute;
+  inset: -26% auto auto -18%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--hero-glow), transparent 72%);
+  opacity: 0.9;
+}
+
+.product-card-visual {
+  position: relative;
+  z-index: 1;
+}
+
+.product-card-chip {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 2;
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgba(9, 20, 32, 0.8);
+  color: #f7fbff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.product-card-image-shell {
+  position: relative;
+  min-height: 256px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid rgba(12, 32, 60, 0.08);
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.14), transparent 44%),
+    linear-gradient(180deg, rgba(231, 238, 246, 0.92), rgba(245, 248, 252, 0.78));
+}
+
+.product-card-image-shell::after {
+  content: "";
+  position: absolute;
+  inset: auto 12% 6% 12%;
+  height: 13%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.18), transparent 72%);
+  filter: blur(12px);
+}
+
+.product-card-image {
+  object-fit: contain;
+  padding: 18px;
+}
+
+.product-card-copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
   gap: 8px;
+}
+
+.product-card-kicker {
+  color: var(--hero-accent-strong);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .product-card p {
@@ -857,7 +1012,13 @@ h4 {
   line-height: 1.5;
 }
 
+.product-description {
+  min-height: 4.6em;
+}
+
 .product-meta {
+  position: relative;
+  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -1338,8 +1499,11 @@ h4 {
   }
 
   .hero-product-core {
-    min-height: 274px;
-    padding: 28px 20px;
+    padding: 18px;
+  }
+
+  .hero-product-image-frame {
+    min-height: 240px;
   }
 
   .hero-supporting-grid,
@@ -1388,6 +1552,10 @@ h4 {
   .hero-primary-action,
   .hero-secondary-action {
     text-align: center;
+  }
+
+  .product-card-image-shell {
+    min-height: 228px;
   }
 }
 

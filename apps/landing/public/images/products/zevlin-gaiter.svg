@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200" role="img" aria-labelledby="title desc">
+  <title id="title">Zevlin Gaiter mock art</title>
+  <desc id="desc">Mock studio poster for the Zevlin Gaiter.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#13111b" />
+      <stop offset="58%" stop-color="#241c38" />
+      <stop offset="100%" stop-color="#5f4294" />
+    </linearGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f7ecff" />
+      <stop offset="100%" stop-color="#d8b4ff" />
+    </linearGradient>
+    <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="2" fill="#f6ebff" fill-opacity="0.16" />
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="30" stdDeviation="26" flood-color="#04020a" flood-opacity="0.38" />
+    </filter>
+  </defs>
+  <rect width="1200" height="1200" fill="url(#bg)" />
+  <rect width="1200" height="1200" fill="url(#dots)" />
+  <circle cx="952" cy="226" r="232" fill="#d8b4ff" fill-opacity="0.18" />
+  <circle cx="214" cy="990" r="282" fill="#5cd9ff" fill-opacity="0.08" />
+  <g opacity="0.24">
+    <path d="M120 910c142-82 300-124 480-124 140 0 296 27 480 87" fill="none" stroke="#f7edff" stroke-width="18" stroke-linecap="round" />
+  </g>
+  <g filter="url(#shadow)">
+    <ellipse cx="600" cy="948" rx="220" ry="42" fill="#000" fill-opacity="0.24" />
+    <path d="M418 372c56-80 122-120 182-120h0c60 0 126 40 182 120l54 80c46 68 46 156 0 224l-54 80c-56 80-122 120-182 120h0c-60 0-126-40-182-120l-54-80c-46-68-46-156 0-224z" fill="url(#ring)" />
+    <path d="M500 446c30-44 66-66 100-66h0c34 0 70 22 100 66l28 44c24 36 24 82 0 118l-28 44c-30 44-66 66-100 66h0c-34 0-70-22-100-66l-28-44c-24-36-24-82 0-118z" fill="#2a1f42" />
+    <path d="M474 388h252" stroke="#ffffff" stroke-opacity="0.44" stroke-width="18" stroke-linecap="round" />
+    <path d="M452 740h296" stroke="#ffffff" stroke-opacity="0.36" stroke-width="16" stroke-linecap="round" />
+    <text x="600" y="548" text-anchor="middle" fill="#f8efff" font-size="78" font-family="Arial Narrow, Avenir Next Condensed, sans-serif" font-weight="800" letter-spacing="10">ZEVLIN</text>
+    <text x="600" y="624" text-anchor="middle" fill="#ead7ff" font-size="46" font-family="Arial, sans-serif" font-weight="700" letter-spacing="7">GAITER</text>
+    <text x="600" y="700" text-anchor="middle" fill="#f4ebff" font-size="30" font-family="Arial, sans-serif" font-weight="700" letter-spacing="6">ALL-WEATHER RIDE LAYER</text>
+  </g>
+  <text x="108" y="156" fill="#fcf7ff" font-size="42" font-family="Arial, sans-serif" font-weight="700" letter-spacing="8">GOODS FOR YOUR GOODS</text>
+  <text x="108" y="214" fill="#ddceef" font-size="28" font-family="Arial, sans-serif" letter-spacing="6">MOCK STUDIO ART / LEGACY LINEUP</text>
+</svg>

@@ -1,16 +1,16 @@
+import Image from "next/image";
 import Link from "next/link";
 import LandingHero from "../components/hero/LandingHero";
 import NewsletterSignupForm from "../components/forms/NewsletterSignupForm";
 import { getLandingContent } from "../lib/content";
+import {
+  getProductMark,
+  getProductTone,
+  getShortDescription,
+  toUsd,
+} from "../lib/productPresentation";
 
 export const revalidate = 60;
-
-function toUsd(priceCents: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(priceCents / 100);
-}
 
 export default async function HomePage() {
   const content = await getLandingContent();
@@ -42,6 +42,7 @@ export default async function HomePage() {
         description: product.description,
         sku: product.slug,
         url: `${siteUrl}/#product-${product.slug}`,
+        image: [`${siteUrl}${product.media.imagePath}`],
         offers: {
           "@type": "Offer",
           priceCurrency: "USD",
@@ -81,12 +82,36 @@ export default async function HomePage() {
         <div className="section-head">
           <p className="section-kicker">From legacy /products</p>
           <h2>{content.productsHeading}</h2>
+          <p className="section-summary">
+            Mock product visuals are hardcoded from the legacy lineup while final photography and
+            commerce data get approved.
+          </p>
         </div>
         <div className="product-grid">
           {content.products.map((product) => (
-            <article id={`product-${product.slug}`} className="product-card" key={product.id}>
-              <h3>{product.name}</h3>
-              <p>{product.description}</p>
+            <article
+              id={`product-${product.slug}`}
+              className="product-card"
+              key={product.id}
+              style={getProductTone(product.slug)}
+            >
+              <div className="product-card-visual">
+                <span className="product-card-chip">{product.media.label}</span>
+                <div className="product-card-image-shell">
+                  <Image
+                    src={product.media.imagePath}
+                    alt={product.media.imageAlt}
+                    fill
+                    sizes="(min-width: 1200px) 22vw, (min-width: 768px) 44vw, 100vw"
+                    className="product-card-image"
+                  />
+                </div>
+              </div>
+              <div className="product-card-copy">
+                <p className="product-card-kicker">{getProductMark(product.name)}</p>
+                <h3>{product.name}</h3>
+                <p className="product-description">{getShortDescription(product.description)}</p>
+              </div>
               <div className="product-meta">
                 <span>{toUsd(product.priceCents)}</span>
                 <code>{product.slug}</code>
