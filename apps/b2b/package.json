@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3005",
     "build": "next build",
-    "start": "next start -p ${PORT:-3005}",
+    "start": "node ../../scripts/next-start.mjs 3005",
     "lint": "eslint . --max-warnings=0",
     "typecheck": "tsc --noEmit",
     "test": "echo \"No tests for @zevlin/b2b yet\""

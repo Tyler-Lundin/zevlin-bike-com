@@ -111,6 +111,7 @@ Development-specific:
 - `NEXT_PUBLIC_SITE_URL=https://dev.zevlinbike.com`
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID=<dev GA id or blank>`
 - Do not set `NODE_ENV=dev` or `NODE_ENV=development`; Next.js runtime should stay `production` in Coolify
+- If Coolify has a separate port field, use that field and keep the start command as `pnpm --filter @zevlin/landing start`
 
 Production-specific:
 
