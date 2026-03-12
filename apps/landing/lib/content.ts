@@ -46,12 +46,15 @@ export type LandingContent = {
   logoPath: string;
   hero: {
     eyebrow: string;
-    title: string;
-    subtitle: string;
+    headline: string;
+    subheadline: string;
     primaryCta: LandingLink;
     secondaryCta: LandingLink;
-    trustPoints: string[];
-    freeShippingLabel: string;
+    trustChips: string[];
+    shippingBadge: string;
+    featuredProductSlug: string;
+    supportingProductSlugs: string[];
+    microTestimonial: LandingTestimonial;
     backgroundImagePath: string;
   };
   navLinks: LandingLink[];
@@ -200,19 +203,28 @@ const oldWebsiteLandingContent: LandingContent = {
   brandTagline: "Goods for your goods",
   logoPath: "/images/logo.png",
   hero: {
-    eyebrow: "Legacy Homepage",
-    title: "Goods for your Goods",
-    subtitle:
-      "Zevlin. Riding without it, is just nuts. Rebuilt from the old website with the same product copy, policy copy, and rider messaging.",
-    primaryCta: { label: "Shop Zevlin Gear", href: "/store" },
-    secondaryCta: { label: "View Full Support Details", href: "#support" },
-    trustPoints: [
+    eyebrow: "Legacy energy, rebuilt for the long ride",
+    headline: "Goods for your Goods",
+    subheadline:
+      "Zevlin. Riding without it, is just nuts. Natural formulas, faster shipping, and zero-nonsense support for riders who would rather push watts than deal with saddle misery.",
+    primaryCta: { label: "Shop the lineup", href: "#products" },
+    secondaryCta: { label: "View support details", href: "#support" },
+    trustChips: [
       "Free shipping on orders over $49",
       "30-day returns, opened or not",
       "Natural formulas for all-day ride comfort",
+      "Human support when you need it",
     ],
-    freeShippingLabel: "Free Shipping on orders over $49",
-    backgroundImagePath: "/images/hero-image.jpeg",
+    shippingBadge: "Free shipping on orders over $49",
+    featuredProductSlug: "crack-chamois-cream",
+    supportingProductSlugs: ["super-crack-chamois-cream", "byot-fitness-wash"],
+    microTestimonial: legacyTestimonials[0] ?? {
+      name: "Zevlin Rider",
+      title: "Verified Owner",
+      quote: "Zevlin keeps the ride focused on the ride.",
+      rating: 5,
+    },
+    backgroundImagePath: "/images/hero-image.png",
   },
   navLinks: [
     { label: "Home", href: "#home" },
@@ -255,7 +267,7 @@ const oldWebsiteLandingContent: LandingContent = {
     subtitle:
       "Join thousands of riders who trust Zevlin for a chafe-free experience, ride after ride.",
     bulletPoints: ["Long-lasting comfort", "Made with natural ingredients"],
-    button: { label: "Gear Up Now", href: "/store" },
+    button: { label: "Gear Up Now", href: "#products" },
   },
   newsletter: {
     title: "Unlock Your Edge: Join the Zevlin Crew!",

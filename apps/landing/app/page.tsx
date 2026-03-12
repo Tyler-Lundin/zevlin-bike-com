@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import LandingHero from "../components/hero/LandingHero";
 import NewsletterSignupForm from "../components/forms/NewsletterSignupForm";
 import { getLandingContent } from "../lib/content";
 
@@ -41,7 +41,7 @@ export default async function HomePage() {
         name: product.name,
         description: product.description,
         sku: product.slug,
-        url: `${siteUrl}/store?product=${product.slug}`,
+        url: `${siteUrl}/#product-${product.slug}`,
         offers: {
           "@type": "Offer",
           priceCurrency: "USD",
@@ -75,66 +75,7 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productListSchema) }}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-      <header id="home" className="panel top-nav">
-        <div className="brand-lockup">
-          <Image src={content.logoPath} alt={content.brandName} width={46} height={46} />
-          <div>
-            <p className="brand-title">{content.brandName}</p>
-            <p className="brand-tagline">{content.brandTagline}</p>
-          </div>
-        </div>
-        <nav className="link-cloud" aria-label="Primary">
-          {content.navLinks.map((item) => (
-            <Link key={item.label} href={item.href}>
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </header>
-
-      <section className="panel hero-grid">
-        <div className="hero-copy">
-          <p className="eyebrow">{content.hero.eyebrow}</p>
-          <h1>{content.hero.title}</h1>
-          <p className="subtitle">{content.hero.subtitle}</p>
-
-          <div className="hero-actions">
-            <Link className="primary-action" href={content.hero.primaryCta.href}>
-              {content.hero.primaryCta.label}
-            </Link>
-            <Link className="secondary-action" href={content.hero.secondaryCta.href}>
-              {content.hero.secondaryCta.label}
-            </Link>
-          </div>
-
-          <ul className="trust-list">
-            {content.hero.trustPoints.map((point) => (
-              <li key={point}>{point}</li>
-            ))}
-          </ul>
-        </div>
-
-        <div className="hero-media">
-          <div className="hero-image-wrap">
-            <Image
-              src={content.hero.backgroundImagePath}
-              alt="Zevlin rider scene"
-              width={1080}
-              height={720}
-              priority
-            />
-          </div>
-          <p className="pill">{content.hero.freeShippingLabel}</p>
-          <ul className="mini-product-list">
-            {content.products.slice(0, 2).map((product) => (
-              <li key={product.id}>
-                <strong>{product.name}</strong>
-                <span>{toUsd(product.priceCents)}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+      <LandingHero content={content} />
 
       <section id="products" className="section-block">
         <div className="section-head">
@@ -143,7 +84,7 @@ export default async function HomePage() {
         </div>
         <div className="product-grid">
           {content.products.map((product) => (
-            <article className="product-card" key={product.id}>
+            <article id={`product-${product.slug}`} className="product-card" key={product.id}>
               <h3>{product.name}</h3>
               <p>{product.description}</p>
               <div className="product-meta">
