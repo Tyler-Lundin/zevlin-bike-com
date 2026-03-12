@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { LandingContent, LandingProduct } from "../../lib/content";
+import LandingNav from "../nav/LandingNav";
 import {
   getProductMark,
   getProductTone,
@@ -61,28 +62,13 @@ export default function LandingHero({ content }: { content: LandingContent }) {
   ];
 
   return (
-    <div className="hero-shell">
-      <header id="home" className="top-nav hero-nav">
-        <div className="brand-lockup">
-          <Image src={content.logoPath} alt={content.brandName} width={44} height={44} priority />
-          <div>
-            <p className="brand-title">{content.brandName}</p>
-            <p className="brand-tagline">{content.brandTagline}</p>
-          </div>
-        </div>
-
-        <nav className="link-cloud" aria-label="Primary">
-          {content.navLinks.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={item.variant === "primary" ? "nav-link-primary" : undefined}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </header>
+    <div className="hero-shell" id="home">
+      <LandingNav
+        brandName={content.brandName}
+        brandTagline={content.brandTagline}
+        logoPath={content.logoPath}
+        navLinks={content.navLinks}
+      />
 
       <section className="hero-stage" aria-labelledby="hero-heading">
         <div className="hero-atmosphere" aria-hidden="true">
