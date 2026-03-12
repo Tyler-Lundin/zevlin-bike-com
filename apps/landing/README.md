@@ -9,6 +9,13 @@ Purpose: Landing application in the Zevlin monorepo.
 - `pnpm --filter @zevlin/landing typecheck`
 - `pnpm migrate:inventory:legacy`
 
+## Public Runtime Env
+
+- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_STORE_URL`
+- `NEXT_PUBLIC_TEAM_URL`
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+
 ## Legacy Migration Inputs
 
 - Generated inventory JSON: `apps/landing/lib/legacy-inventory.json`

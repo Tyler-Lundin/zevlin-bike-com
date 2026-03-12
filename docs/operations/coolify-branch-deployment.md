@@ -109,6 +109,8 @@ Development-specific:
 - `APP_ENV=dev`
 - `ENFORCE_SELF_HOSTED_REQUIRED=false`
 - `NEXT_PUBLIC_SITE_URL=https://dev.zevlinbike.com`
+- `NEXT_PUBLIC_STORE_URL=https://store.dev.zevlinbike.com` (or your actual dev store URL)
+- `NEXT_PUBLIC_TEAM_URL=https://team.dev.zevlinbike.com` (or your actual dev team URL)
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID=<dev GA id or blank>`
 - Do not set `NODE_ENV=dev` or `NODE_ENV=development`; Next.js runtime should stay `production` in Coolify
 - If Coolify has a separate port field, use that field and keep the start command as `pnpm --filter @zevlin/landing start`
@@ -118,6 +120,8 @@ Production-specific:
 - `APP_ENV=prod`
 - `ENFORCE_SELF_HOSTED_REQUIRED=true`
 - `NEXT_PUBLIC_SITE_URL=https://www.zevlinbike.com`
+- `NEXT_PUBLIC_STORE_URL=https://store.zevlinbike.com`
+- `NEXT_PUBLIC_TEAM_URL=https://team.zevlinbike.com`
 - `NEXT_PUBLIC_GA_MEASUREMENT_ID=<prod GA id>`
 
 If you enable strict self-hosted enforcement in production (`APP_ENV=prod`), confirm all required keys in `.env.example` are populated.

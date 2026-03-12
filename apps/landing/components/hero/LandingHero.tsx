@@ -32,6 +32,7 @@ export default function LandingHero({ content }: { content: LandingContent }) {
     .map((slug) => content.products.find((product) => product.slug === slug))
     .filter((product): product is LandingProduct => Boolean(product))
     .slice(0, 2);
+  const featuredProductHref = `${content.storeUrl}/products/${featuredProduct.slug}`;
   const trustRail = [
     {
       href: "/shipping",
@@ -72,7 +73,11 @@ export default function LandingHero({ content }: { content: LandingContent }) {
 
         <nav className="link-cloud" aria-label="Primary">
           {content.navLinks.map((item) => (
-            <Link key={item.label} href={item.href}>
+            <Link
+              key={item.label}
+              href={item.href}
+              className={item.variant === "primary" ? "nav-link-primary" : undefined}
+            >
               {item.label}
             </Link>
           ))}
@@ -170,40 +175,44 @@ export default function LandingHero({ content }: { content: LandingContent }) {
                 <p className="hero-spotlight-kicker">Featured formula</p>
                 <h2>{featuredProduct.name}</h2>
                 <p>{getShortDescription(featuredProduct.description)}</p>
-                <Link className="hero-inline-link" href={`#product-${featuredProduct.slug}`}>
-                  See the full product details
+                <Link className="hero-inline-link" href={featuredProductHref}>
+                  Open in store
                 </Link>
               </div>
             </article>
 
             <div className="hero-supporting-grid">
-              {supportingProducts.map((product) => (
-                <Link
-                  key={product.id}
-                  href={`#product-${product.slug}`}
-                  className="hero-support-card"
-                  style={getProductTone(product.slug)}
-                >
-                  <div className="hero-support-visual">
-                    <Image
-                      src={product.media.imagePath}
-                      alt={product.media.imageAlt}
-                      fill
-                      sizes="(min-width: 1120px) 16vw, 90vw"
-                      className="hero-support-image"
-                    />
-                  </div>
-                  <div className="hero-support-copy">
-                    <p className="hero-support-kicker">{product.media.label}</p>
-                    <h3>{product.name}</h3>
-                    <p>{getShortDescription(product.description)}</p>
-                  </div>
-                  <div className="hero-support-meta">
-                    <span className="hero-support-mark">{getProductMark(product.name)}</span>
-                    <span className="hero-support-price">{toUsd(product.priceCents)}</span>
-                  </div>
-                </Link>
-              ))}
+              {supportingProducts.map((product) => {
+                const productHref = `${content.storeUrl}/products/${product.slug}`;
+
+                return (
+                  <Link
+                    key={product.id}
+                    href={productHref}
+                    className="hero-support-card"
+                    style={getProductTone(product.slug)}
+                  >
+                    <div className="hero-support-visual">
+                      <Image
+                        src={product.media.imagePath}
+                        alt={product.media.imageAlt}
+                        fill
+                        sizes="(min-width: 1120px) 16vw, 90vw"
+                        className="hero-support-image"
+                      />
+                    </div>
+                    <div className="hero-support-copy">
+                      <p className="hero-support-kicker">{product.media.label}</p>
+                      <h3>{product.name}</h3>
+                      <p>{getShortDescription(product.description)}</p>
+                    </div>
+                    <div className="hero-support-meta">
+                      <span className="hero-support-mark">{getProductMark(product.name)}</span>
+                      <span className="hero-support-price">{toUsd(product.priceCents)}</span>
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
