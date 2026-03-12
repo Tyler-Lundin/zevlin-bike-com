@@ -1,7 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { createOrderSchema } from "@zevlin/contracts";
-import { orderItems, orders, withDbSessionContext } from "@zevlin/db";
 import { createStripeCheckoutSession } from "@zevlin/integrations";
 import { createRequestContext, log } from "@zevlin/observability";
 import {
@@ -9,10 +8,11 @@ import {
   hashLookup,
   withApiRateLimit,
 } from "@zevlin/security";
-
-function amountFromOrder(payload: ReturnType<typeof createOrderSchema.parse>): number {
-  return payload.items.reduce((sum, item) => sum + item.quantity * item.unitPriceCents, 0);
-}
+import {
+  getShippingCents,
+  getSubtotalCents,
+  getTotalCents,
+} from "../../../../lib/commerce";
 
 export async function POST(request: NextRequest) {
   const context = createRequestContext({ app: "store", route: "/api/checkout/session" });
@@ -41,7 +41,14 @@ export async function POST(request: NextRequest) {
           }
 
           const orderId = randomUUID();
-          const totalCents = amountFromOrder(parsed.data);
+          const subtotalCents = getSubtotalCents(
+            parsed.data.items.map((item) => ({
+              priceCents: item.unitPriceCents,
+              quantity: item.quantity,
+            })),
+          );
+          const shippingCents = getShippingCents(subtotalCents);
+          const totalCents = getTotalCents(subtotalCents);
           const billingAddressCipher = encryptField(
             JSON.stringify(parsed.data.billingAddress),
             "billing_address",
@@ -58,21 +65,22 @@ export async function POST(request: NextRequest) {
             parsed.data.shippingAddress.address1.toLowerCase(),
             "shipping_address",
           );
+          const dbRuntime = await import("@zevlin/db");
 
-          await withDbSessionContext(
+          await dbRuntime.withDbSessionContext(
             {
               system: true,
               customerId: parsed.data.customerId ?? null,
             },
             async (tx) => {
-              await tx.insert(orders).values({
+              await tx.insert(dbRuntime.orders).values({
                 id: orderId,
                 customerId: parsed.data.customerId ?? null,
                 paymentStatus: "pending",
                 fulfillmentStatus: "pending_payment",
                 shippingStatus: "not_shipped",
-                subtotalCents: totalCents,
-                shippingCostCents: 0,
+                subtotalCents,
+                shippingCostCents: shippingCents,
                 taxCents: 0,
                 discountCents: 0,
                 totalCents,
@@ -82,7 +90,7 @@ export async function POST(request: NextRequest) {
                 shippingAddressHash,
               });
 
-              await tx.insert(orderItems).values(
+              await tx.insert(dbRuntime.orderItems).values(
                 parsed.data.items.map((item) => ({
                   orderId,
                   productId: item.productId,
@@ -98,7 +106,7 @@ export async function POST(request: NextRequest) {
             amountCents: totalCents,
             currency: "usd",
             successUrl: `${request.nextUrl.origin}/checkout/success`,
-            cancelUrl: `${request.nextUrl.origin}/checkout`,
+            cancelUrl: `${request.nextUrl.origin}/checkout?cancelled=1`,
             metadata: {
               source: parsed.data.source,
               orderId,
