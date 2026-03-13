@@ -1,7 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { teamEventSignupSchema } from "@zevlin/contracts";
-import { teamEventSignups, withDbSessionContext } from "@zevlin/db";
 import { createRequestContext, log } from "@zevlin/observability";
 import {
   appendAuditEvent,
@@ -37,9 +36,10 @@ export async function POST(request: NextRequest) {
           "generic",
         );
         const payloadHash = hashLookup(parsed.data.email.toLowerCase(), "generic");
+        const dbRuntime = await import("@zevlin/db");
 
-        await withDbSessionContext({ system: true }, async (tx) => {
-          await tx.insert(teamEventSignups).values({
+        await dbRuntime.withDbSessionContext({ system: true }, async (tx) => {
+          await tx.insert(dbRuntime.teamEventSignups).values({
             id: signupId,
             eventId: parsed.data.eventId,
             signupEncrypted: JSON.stringify(encryptedPayload),

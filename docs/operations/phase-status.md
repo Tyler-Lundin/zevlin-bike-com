@@ -17,7 +17,19 @@
 - `landing` and `team` app pages now consume Directus-backed content with safe fallback data.
 - Expansion of refresh-token rotation lifecycle and staff idle/session TTL enforcement in app routes.
 - Runtime smoke checks (Block 4) pending stable dependency install and local app startup.
+- Experience and launch execution track defined in `docs/roadmap/`.
+
+## Current execution plans
+
+- Master roadmap: `docs/roadmap/experience-and-launch-roadmap.md`
+- Team destination: `docs/roadmap/team-destination-plan.md`
+- Landing polish: `docs/roadmap/landing-polish-plan.md`
+- B2B inquiry: `docs/roadmap/b2b-inquiry-plan.md`
+- Store refinement: `docs/roadmap/store-refinement-plan.md`
+- Production hardening: `docs/roadmap/production-hardening-plan.md`
 
 ## Next milestone
 
-- Phase A/B execution: bring up isolated Coolify Dev/Staging/Prod foundations and complete auth/session hardening tests.
+- Execute the Team Destination Plan first, then the Landing Polish Plan.
+- Use those outputs to finalize homepage routing and quality expectations for the B2B and store refinement passes.
+- Treat the Production Hardening Plan as the release gate before production promotion.
