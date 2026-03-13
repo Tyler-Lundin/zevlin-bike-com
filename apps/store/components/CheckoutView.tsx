@@ -264,6 +264,26 @@ export default function CheckoutView({ cancelled = false }: { cancelled?: boolea
         </div>
       ) : null}
 
+      <section className="checkout-note-grid" aria-label="Checkout notes">
+        <article className="surface-card checkout-note-card">
+          <p className="section-kicker">Shipping</p>
+          <h2>Free over threshold</h2>
+          <p className="form-note">
+            Orders above the free-shipping threshold move through checkout without added shipping cost.
+          </p>
+        </article>
+        <article className="surface-card checkout-note-card">
+          <p className="section-kicker">Returns</p>
+          <h2>30-day policy</h2>
+          <p className="form-note">Returns stay straightforward, visible, and routed into direct Zevlin support.</p>
+        </article>
+        <article className="surface-card checkout-note-card">
+          <p className="section-kicker">Payment</p>
+          <h2>Hosted Stripe flow</h2>
+          <p className="form-note">Card entry and payment confirmation happen in Stripe after this step.</p>
+        </article>
+      </section>
+
       <form id="store-checkout-form" className="checkout-layout" onSubmit={handleSubmit}>
         <section className="surface-card checkout-form-card">
           <AddressFields
@@ -312,7 +332,7 @@ export default function CheckoutView({ cancelled = false }: { cancelled?: boolea
           note="Payment is completed in hosted Stripe Checkout. Taxes are not applied in this v1 flow."
           actionSlot={
             <button type="submit" className="button-primary button-block" disabled={submitting}>
-              {submitting ? "Redirecting..." : "Continue to secure payment"}
+              {submitting ? "Redirecting..." : "Continue to Stripe Checkout"}
             </button>
           }
         />

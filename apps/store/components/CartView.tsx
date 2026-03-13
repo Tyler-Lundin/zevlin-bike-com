@@ -37,7 +37,7 @@ export default function CartView() {
         <div className="section-heading">
           <p className="section-kicker">Cart</p>
           <h1>Your bag is empty.</h1>
-          <p className="section-body">Keep it simple. Add the products you actually need and check out when you are ready.</p>
+          <p className="section-body">Keep it simple. Add the products you actually need and return when you are ready to check out.</p>
         </div>
         <div className="surface-card empty-state-card">
           <Link href="/" className="button-primary">
@@ -56,16 +56,21 @@ export default function CartView() {
 
   return (
     <div className="page-stack">
-      <div className="section-heading">
+      <div className="section-heading cart-heading">
         <p className="section-kicker">Cart</p>
-        <h1>Review the bag.</h1>
-        <p className="section-body">Minimal summary, direct controls, and no interruptions.</p>
+        <div className="cart-heading-row">
+          <h1>Review the bag.</h1>
+          <Link href="/" className="button-secondary cart-heading-link">
+            Keep shopping
+          </Link>
+        </div>
+        <p className="section-body">Adjust quantities, check shipping progress, and move straight into checkout.</p>
       </div>
 
       <div className="surface-card shipping-progress-banner">
         <div>
           <p>{remaining === 0 ? "Free shipping unlocked" : `${toUsd(remaining)} away from free shipping`}</p>
-          <span>{progress}% of target reached</span>
+          <span>{remaining === 0 ? "All items qualify for free shipping." : `${progress}% of target reached`}</span>
         </div>
         <div className="shipping-progress-track" aria-hidden="true">
           <span style={{ width: `${progress}%` }} />
@@ -82,6 +87,7 @@ export default function CartView() {
               <div className="cart-item-copy">
                 <div className="cart-item-header">
                   <div>
+                    <p className="cart-item-label">Zevlin lineup</p>
                     <h2>{item.name}</h2>
                     <p>{toUsd(item.priceCents)} each</p>
                   </div>
@@ -99,6 +105,9 @@ export default function CartView() {
                   >
                     Remove
                   </button>
+                  <Link href={`/products/${item.slug}`} className="cart-item-link">
+                    View product
+                  </Link>
                 </div>
               </div>
             </article>

@@ -43,6 +43,7 @@ export default function StoreShell({
             >
               Catalog
             </Link>
+            <a href="mailto:zevlinbike@gmail.com">Support</a>
             <Link
               href="/cart"
               className={isActive(pathname, "/cart") ? "is-active" : undefined}

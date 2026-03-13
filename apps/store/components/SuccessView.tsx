@@ -50,16 +50,28 @@ export default function SuccessView({ marketingSiteUrl }: { marketingSiteUrl: st
         </div>
       </section>
 
-      {lastCheckout ? (
-        <OrderSummaryPanel
-          title="Confirmation snapshot"
-          items={lastCheckout.items}
-          subtotalCents={lastCheckout.subtotalCents}
-          shippingCents={lastCheckout.shippingCents}
-          totalCents={lastCheckout.totalCents}
-          note="This page is a customer-facing confirmation snapshot. Payment status is finalized in backend order processing."
-        />
-      ) : null}
+      <div className="success-detail-grid">
+        <section className="surface-card success-next-card">
+          <p className="section-kicker">Next steps</p>
+          <h2>What happens now</h2>
+          <ul className="success-checklist">
+            <li>Stripe handles payment confirmation after this handoff.</li>
+            <li>Zevlin support follows the order through fulfillment and tracking.</li>
+            <li>Use the main site or support email if anything looks off.</li>
+          </ul>
+        </section>
+
+        {lastCheckout ? (
+          <OrderSummaryPanel
+            title="Confirmation snapshot"
+            items={lastCheckout.items}
+            subtotalCents={lastCheckout.subtotalCents}
+            shippingCents={lastCheckout.shippingCents}
+            totalCents={lastCheckout.totalCents}
+            note="This page is a customer-facing confirmation snapshot. Payment status is finalized in backend order processing."
+          />
+        ) : null}
+      </div>
     </div>
   );
 }

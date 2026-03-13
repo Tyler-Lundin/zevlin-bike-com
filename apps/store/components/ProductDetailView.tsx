@@ -54,24 +54,41 @@ export default function ProductDetailView({ product }: { product: StoreProduct }
       </div>
 
       <section className="product-detail-layout">
-        <div className="surface-card product-stage-card">
-          <div className="product-stage-media">
-            <span className="product-stage-badge">{product.media.label}</span>
-            <Image
-              src={product.media.imagePath}
-              alt={product.media.imageAlt}
-              fill
-              priority
-              sizes="(min-width: 1024px) 46vw, 100vw"
-              className="product-stage-image"
-            />
+        <div className="product-detail-main">
+          <div className="surface-card product-stage-card">
+            <div className="product-stage-copy">
+              <p className="section-kicker">{product.usageLabel}</p>
+              <h1>{product.name}</h1>
+              <p className="product-stage-deck">{product.shortDescription}</p>
+            </div>
+
+            <div className="product-stage-media">
+              <span className="product-stage-badge">{product.media.label}</span>
+              <Image
+                src={product.media.imagePath}
+                alt={product.media.imageAlt}
+                fill
+                priority
+                sizes="(min-width: 1024px) 46vw, 100vw"
+                className="product-stage-image"
+              />
+            </div>
+
+            <div className="product-stage-meta-strip">
+              {product.bestFor.slice(0, 3).map((item) => (
+                <div key={item} className="product-stage-meta-item">
+                  <span>Best for</span>
+                  <strong>{item}</strong>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
         <div ref={buyBoxRef} className="surface-card product-buy-box">
-          <p className="section-kicker">Product detail</p>
-          <h1>{product.name}</h1>
-          <p className="product-buy-summary">{product.shortDescription}</p>
+          <p className="section-kicker">Purchase</p>
+          <h2>{product.name}</h2>
+          <p className="product-buy-summary">{product.description}</p>
           <p className="product-buy-price">{toUsd(product.priceCents)}</p>
           {inCart ? <p className="product-buy-meta">Currently in bag: {inCart.quantity}</p> : null}
 
@@ -86,9 +103,24 @@ export default function ProductDetailView({ product }: { product: StoreProduct }
             <button type="button" className="button-primary button-block" onClick={handleAddToCart}>
               Add to bag
             </button>
-            <Link href="/cart" className="button-secondary button-block">
-              Review cart
-            </Link>
+              <Link href="/cart" className="button-secondary button-block">
+                Review cart
+              </Link>
+            </div>
+
+          <div className="buy-box-fact-grid">
+            <div className="buy-box-fact">
+              <span>Shipping</span>
+              <strong>Free over {toUsd(FREE_SHIPPING_THRESHOLD_CENTS)}</strong>
+            </div>
+            <div className="buy-box-fact">
+              <span>Returns</span>
+              <strong>30-day window</strong>
+            </div>
+            <div className="buy-box-fact">
+              <span>Support</span>
+              <strong>{SUPPORT_EMAIL}</strong>
+            </div>
           </div>
 
           <p className="buy-box-note">
@@ -99,25 +131,32 @@ export default function ProductDetailView({ product }: { product: StoreProduct }
 
       <section className="product-detail-panels">
         <article className="surface-card detail-panel">
-          <p className="section-kicker">Overview</p>
-          <h2>What it is</h2>
-          <p>{product.description}</p>
+          <p className="section-kicker">Best for</p>
+          <h2>Where it fits</h2>
+          <ul className="detail-bullet-list">
+            {product.bestFor.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
         </article>
 
         <article className="surface-card detail-panel">
-          <p className="section-kicker">Shipping</p>
-          <h2>Simple fulfillment</h2>
-          <p>
-            Orders above {toUsd(FREE_SHIPPING_THRESHOLD_CENTS)} ship free. Below that threshold, the store applies
-            a flat shipping rate at checkout.
-          </p>
+          <p className="section-kicker">Field notes</p>
+          <h2>What riders should expect</h2>
+          <ul className="detail-bullet-list">
+            {product.fieldNotes.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
         </article>
 
         <article className="surface-card detail-panel">
-          <p className="section-kicker">Support</p>
-          <h2>Direct and human</h2>
+          <p className="section-kicker">Shipping + support</p>
+          <h2>Simple fulfillment, direct help</h2>
           <p>
-            Questions, returns, and product guidance route directly to Zevlin support without chatbots or layered handoffs.
+            Orders above {toUsd(FREE_SHIPPING_THRESHOLD_CENTS)} ship free. Below that threshold, the store applies a
+            flat shipping rate at checkout. Questions and returns route straight to Zevlin support without layered
+            handoffs.
           </p>
         </article>
       </section>
