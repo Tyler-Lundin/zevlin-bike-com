@@ -16,10 +16,25 @@ function trimTrailingSlash(value: string): string {
   return value.replace(/\/$/, "");
 }
 
+function getReviewExcerpt(quote: string): string {
+  const firstSentence = quote.match(/^.+?[.!?](?:\s|$)/)?.[0]?.trim();
+
+  if (firstSentence && firstSentence.length <= 116) {
+    return firstSentence;
+  }
+
+  if (quote.length <= 120) {
+    return quote;
+  }
+
+  return `${quote.slice(0, 117).trimEnd()}...`;
+}
+
 export default async function HomePage() {
   const content = await getLandingContent();
   const siteUrl = trimTrailingSlash(process.env.NEXT_PUBLIC_SITE_URL || "https://www.zevlinbike.com");
   const getStoreProductHref = (slug: string) => `${content.storeUrl}/products/${slug}`;
+  const featuredProductSlug = content.hero.featuredProductSlug;
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -85,18 +100,21 @@ export default async function HomePage() {
 
       <main className="landing-home">
         <section className="landing-section proof-strip-section" aria-labelledby="proof-strip-title">
-          <div className="landing-section-header landing-section-header-centered">
-            <p className="landing-eyebrow">{content.proofStrip.eyebrow}</p>
-            <h2 id="proof-strip-title">{content.proofStrip.title}</h2>
-            <p className="landing-summary">{content.proofStrip.summary}</p>
-          </div>
-          <div className="proof-strip-grid">
-            {content.proofStrip.items.map((item) => (
-              <article key={item.title} className="landing-surface proof-card">
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </article>
-            ))}
+          <div className="proof-strip-shell">
+            <div className="landing-section-header proof-strip-intro">
+              <p className="landing-eyebrow">{content.proofStrip.eyebrow}</p>
+              <h2 id="proof-strip-title">{content.proofStrip.title}</h2>
+              <p className="landing-summary">{content.proofStrip.summary}</p>
+            </div>
+            <div className="proof-strip-grid">
+              {content.proofStrip.items.map((item, index) => (
+                <article key={item.title} className="landing-surface proof-card">
+                  <p className="proof-card-index">{String(index + 1).padStart(2, "0")}</p>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -116,11 +134,16 @@ export default async function HomePage() {
             {content.products.map((product) => (
               <article
                 id={`product-${product.slug}`}
-                className="landing-surface landing-product-card"
+                className={`landing-surface landing-product-card${
+                  product.slug === featuredProductSlug ? " landing-product-card-featured" : ""
+                }`}
                 key={product.id}
                 style={getProductTone(product.slug)}
               >
                 <div className="landing-product-visual">
+                  {product.slug === featuredProductSlug ? (
+                    <span className="landing-product-feature-label">Featured in the hero</span>
+                  ) : null}
                   <span className="landing-product-chip">{product.media.label}</span>
                   <div className="landing-product-image-shell">
                     <Image
@@ -155,32 +178,35 @@ export default async function HomePage() {
         </section>
 
         <section id="guide" className="landing-section use-case-section" aria-labelledby="guide-title">
-          <div className="landing-section-header landing-section-header-centered">
-            <p className="landing-eyebrow">{content.useCaseGuide.eyebrow}</p>
-            <h2 id="guide-title">{content.useCaseGuide.title}</h2>
-            <p className="landing-summary">{content.useCaseGuide.summary}</p>
-          </div>
-          <div className="guide-grid">
-            {content.useCaseGuide.items.map((item) => (
-              <article key={item.title} className="landing-surface guide-card">
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <div className="guide-card-links">
-                  {item.productSlugs.map((slug) => {
-                    const product = content.products.find((entry) => entry.slug === slug);
-                    if (!product) {
-                      return null;
-                    }
+          <div className="guide-shell">
+            <div className="landing-section-header guide-intro">
+              <p className="landing-eyebrow">{content.useCaseGuide.eyebrow}</p>
+              <h2 id="guide-title">{content.useCaseGuide.title}</h2>
+              <p className="landing-summary">{content.useCaseGuide.summary}</p>
+            </div>
+            <div className="guide-grid">
+              {content.useCaseGuide.items.map((item, index) => (
+                <article key={item.title} className="landing-surface guide-card">
+                  <p className="guide-card-step">{String(index + 1).padStart(2, "0")}</p>
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                  <div className="guide-card-links">
+                    {item.productSlugs.map((slug) => {
+                      const product = content.products.find((entry) => entry.slug === slug);
+                      if (!product) {
+                        return null;
+                      }
 
-                    return (
-                      <Link key={slug} href={getStoreProductHref(slug)} className="guide-card-link">
-                        {product.name}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </article>
-            ))}
+                      return (
+                        <Link key={slug} href={getStoreProductHref(slug)} className="guide-card-link">
+                          {product.name}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -247,54 +273,63 @@ export default async function HomePage() {
         </section>
 
         <section id="reviews" className="landing-section reviews-section" aria-labelledby="reviews-title">
-          <div className="landing-section-header landing-section-header-centered">
-            <p className="landing-eyebrow">{content.reviews.eyebrow}</p>
-            <h2 id="reviews-title">{content.reviews.title}</h2>
-            <p className="landing-summary">{content.reviews.summary}</p>
-          </div>
-          <div className="review-grid">
-            {content.reviews.items.map((item) => (
-              <article key={`${item.name}-${item.title}`} className="landing-surface review-card">
-                <p className="stars">{"*".repeat(item.rating)}</p>
-                <p className="review-quote">&ldquo;{item.quote}&rdquo;</p>
-                <p className="review-byline">
-                  {item.name}
-                  <span>{item.title}</span>
-                </p>
-              </article>
-            ))}
+          <div className="review-strip-shell">
+            <div className="landing-section-header review-strip-intro">
+              <p className="landing-eyebrow">{content.reviews.eyebrow}</p>
+              <h2 id="reviews-title">{content.reviews.title}</h2>
+              <p className="landing-summary">{content.reviews.summary}</p>
+            </div>
+            <div className="review-grid">
+              {content.reviews.items.map((item, index) => (
+                <article
+                  key={`${item.name}-${item.title}`}
+                  className={`landing-surface review-card${index === 0 ? " review-card-featured" : ""}`}
+                >
+                  <p className="stars">{"*".repeat(item.rating)}</p>
+                  <p className="review-quote">&ldquo;{getReviewExcerpt(item.quote)}&rdquo;</p>
+                  <p className="review-byline">
+                    {item.name}
+                    <span>{item.title}</span>
+                  </p>
+                </article>
+              ))}
+            </div>
           </div>
         </section>
 
         <section id="support" className="landing-section support-section" aria-labelledby="support-title">
-          <div className="landing-section-header landing-section-header-centered">
-            <p className="landing-eyebrow">{content.supportHighlights.eyebrow}</p>
-            <h2 id="support-title">{content.supportHighlights.title}</h2>
-            <p className="landing-summary">{content.supportHighlights.summary}</p>
-          </div>
-
-          <div className="support-grid">
-            {content.supportHighlights.items.map((item) => (
-              <article key={item.title} className="landing-surface support-card">
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-                <Link href={item.href} className="landing-button-inline">
-                  {item.linkLabel}
-                </Link>
-              </article>
-            ))}
-          </div>
-
-          <aside className="landing-surface b2b-callout">
-            <div>
-              <p className="landing-eyebrow">B2B</p>
-              <h3>{content.supportHighlights.b2bCallout.title}</h3>
-              <p>{content.supportHighlights.b2bCallout.description}</p>
+          <div className="support-shell">
+            <div className="landing-section-header support-intro">
+              <p className="landing-eyebrow">{content.supportHighlights.eyebrow}</p>
+              <h2 id="support-title">{content.supportHighlights.title}</h2>
+              <p className="landing-summary">{content.supportHighlights.summary}</p>
             </div>
-            <Link className="landing-button-secondary" href={content.supportHighlights.b2bCallout.cta.href}>
-              {content.supportHighlights.b2bCallout.cta.label}
-            </Link>
-          </aside>
+
+            <div className="support-content">
+              <div className="support-grid">
+                {content.supportHighlights.items.map((item) => (
+                  <article key={item.title} className="landing-surface support-card">
+                    <h3>{item.title}</h3>
+                    <p>{item.description}</p>
+                    <Link href={item.href} className="landing-button-inline">
+                      {item.linkLabel}
+                    </Link>
+                  </article>
+                ))}
+              </div>
+
+              <aside className="landing-surface b2b-callout">
+                <div>
+                  <p className="landing-eyebrow">B2B</p>
+                  <h3>{content.supportHighlights.b2bCallout.title}</h3>
+                  <p>{content.supportHighlights.b2bCallout.description}</p>
+                </div>
+                <Link className="landing-button-secondary" href={content.supportHighlights.b2bCallout.cta.href}>
+                  {content.supportHighlights.b2bCallout.cta.label}
+                </Link>
+              </aside>
+            </div>
+          </div>
         </section>
 
         <section id="faq" className="landing-section faq-section" aria-labelledby="faq-title">

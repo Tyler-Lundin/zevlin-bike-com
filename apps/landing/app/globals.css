@@ -1744,8 +1744,8 @@ h4 {
 
 .landing-home {
   display: grid;
-  gap: 32px;
-  padding: 52px clamp(20px, 4vw, 48px) 96px;
+  gap: 44px;
+  padding: 60px clamp(20px, 4vw, 48px) 96px;
   background:
     radial-gradient(circle at top, rgba(160, 191, 221, 0.2), transparent 48%),
     linear-gradient(180deg, #f6f8fb 0%, #edf2f7 100%);
@@ -1766,8 +1766,8 @@ h4 {
 
 .landing-section-header {
   display: grid;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 10px;
+  margin-bottom: 22px;
 }
 
 .landing-section-header-centered {
@@ -1786,10 +1786,10 @@ h4 {
 
 .landing-summary {
   margin: 0;
-  max-width: 760px;
+  max-width: 58ch;
   color: #516173;
   font-size: 1.02rem;
-  line-height: 1.75;
+  line-height: 1.68;
 }
 
 .landing-button-primary,
@@ -1848,10 +1848,31 @@ h4 {
   gap: 20px;
 }
 
+.proof-strip-shell,
+.guide-shell,
+.review-strip-shell,
+.support-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.support-shell {
+  gap: 28px;
+}
+
+.proof-strip-intro,
+.guide-intro,
+.review-strip-intro,
+.support-intro {
+  margin-bottom: 0;
+}
+
 .proof-strip-grid,
-.review-grid,
+.guide-grid,
 .support-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .proof-card,
@@ -1860,6 +1881,16 @@ h4 {
   display: grid;
   gap: 14px;
   padding: 26px;
+}
+
+.proof-card-index,
+.guide-card-step {
+  margin: 0;
+  color: #7b90a6;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .proof-card h3,
@@ -1900,10 +1931,38 @@ h4 {
   min-height: 100%;
 }
 
+.landing-product-card-featured {
+  grid-column: span 2;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  align-items: end;
+}
+
 .landing-product-visual {
   position: relative;
   display: grid;
   gap: 12px;
+}
+
+.landing-product-card-featured .landing-product-visual {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.landing-product-card-featured .landing-product-copy,
+.landing-product-card-featured .landing-product-meta {
+  grid-column: 2;
+}
+
+.landing-product-feature-label {
+  justify-self: start;
+  padding: 7px 11px;
+  border-radius: 999px;
+  background: rgba(21, 57, 89, 0.08);
+  color: #244e72;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .landing-product-chip {
@@ -1979,12 +2038,12 @@ h4 {
 }
 
 .guide-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .guide-card {
   display: grid;
-  gap: 18px;
+  gap: 16px;
   padding: 24px;
 }
 
@@ -2127,11 +2186,16 @@ h4 {
 }
 
 .review-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1.1fr) repeat(2, minmax(0, 0.95fr));
 }
 
 .review-card {
   padding: 28px;
+}
+
+.review-card-featured {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(241, 246, 251, 0.94));
+  box-shadow: 0 30px 70px -56px rgba(31, 53, 77, 0.2);
 }
 
 .review-card .stars {
@@ -2141,6 +2205,11 @@ h4 {
 .review-quote {
   font-size: 1.02rem;
   color: #1d3043;
+}
+
+.review-card-featured .review-quote {
+  font-size: 1.14rem;
+  line-height: 1.65;
 }
 
 .review-byline {
@@ -2155,8 +2224,13 @@ h4 {
   font-weight: 500;
 }
 
+.support-content {
+  display: grid;
+  gap: 20px;
+}
+
 .support-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .support-card {
@@ -2271,17 +2345,36 @@ h4 {
 }
 
 @media (max-width: 1120px) {
-  .proof-strip-grid,
-  .support-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .proof-strip-shell,
+  .guide-shell,
+  .review-strip-shell,
+  .support-shell {
+    grid-template-columns: 1fr;
   }
 
   .landing-product-grid,
   .review-grid,
-  .guide-grid,
   .team-teaser-shell,
   .brand-proof-shell {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .proof-strip-grid,
+  .guide-grid,
+  .support-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .landing-product-card-featured {
+    grid-column: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .landing-product-card-featured .landing-product-visual,
+  .landing-product-card-featured .landing-product-copy,
+  .landing-product-card-featured .landing-product-meta {
+    grid-column: auto;
+    grid-row: auto;
   }
 
   .product-showcase-header,
@@ -2304,6 +2397,13 @@ h4 {
   .landing-home {
     gap: 24px;
     padding: 40px 18px 76px;
+  }
+
+  .proof-strip-shell,
+  .guide-shell,
+  .review-strip-shell,
+  .support-shell {
+    grid-template-columns: 1fr;
   }
 
   .proof-strip-grid,

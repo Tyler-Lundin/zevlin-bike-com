@@ -228,7 +228,7 @@ export async function getLandingContent(): Promise<LandingContent> {
       eyebrow: "Why Zevlin",
       title: "A smaller lineup with a sharper reason to exist.",
       summary:
-        "Zevlin stays focused on the products riders actually use, backed by shipping, returns, and support that do not waste time.",
+        "Focused products, visible policies, and support that answers like a real business.",
       items: [
         {
           title: "Ride-first comfort",
@@ -252,14 +252,14 @@ export async function getLandingContent(): Promise<LandingContent> {
       eyebrow: "The lineup",
       title: "Five essentials. No filler. Clear reasons to buy each one.",
       summary:
-        "Every product on the homepage belongs here. The goal is straightforward: help riders choose quickly, then move them into the store with confidence.",
+        "Five products, each tied to a clear rider problem and a direct path into the store.",
       primaryCta: { label: "Open the full store", href: storeUrl },
     },
     useCaseGuide: {
       eyebrow: "Pick the right product",
       title: "Start with the ride problem, not the catalog.",
       summary:
-        "If you know the situation you are solving, the lineup gets small fast. This section should make the choice obvious in under a minute.",
+        "If you start with the ride problem, the right product becomes obvious fast.",
       items: [
         {
           title: "Daily training comfort",
@@ -287,11 +287,11 @@ export async function getLandingContent(): Promise<LandingContent> {
       eyebrow: "Zevlin Cycling Team",
       title: "Products backed by a real rider community.",
       summary:
-        "Zevlin is not just a storefront. The team side of the brand is where rides, training sessions, and community momentum stay active.",
+        "The team side of Zevlin keeps rides, training, and rider community active beyond the store.",
       points: [
-        "Open sessions and team-led training blocks live in the dedicated team app.",
-        "The team presence gives the brand real community proof beyond product claims.",
-        "Riders can follow what is coming next without digging through social noise.",
+        "Live session schedule in the dedicated team app.",
+        "Real rider community behind the brand.",
+        "Clean path to join, follow, or inquire.",
       ],
       imagePath: "/images/about-hero-image.png",
       imageAlt: "Zevlin Cycling Team rider lifestyle image",
@@ -301,10 +301,10 @@ export async function getLandingContent(): Promise<LandingContent> {
       eyebrow: "Brand proof",
       title: "Built by cyclists who care about comfort, not marketing theater.",
       summary:
-        "The brand story should support the purchase decision, not distract from it. Zevlin exists to make long rides feel more manageable and customer support feel more direct.",
+        "The story matters only if it reinforces the product and support experience.",
       paragraphs: [
-        "Zevlin started from a simple rider problem: comfort products matter most when they disappear into the ride and just work.",
-        "That same thinking now shapes the site, the store, and support operations. Keep the lineup focused, keep the tone honest, and keep the customer experience easy to trust.",
+        "Zevlin started from a rider problem: comfort products should disappear into the ride and simply work.",
+        "That same principle now drives the site, the lineup, and the support path: keep it focused, readable, and easy to trust.",
       ],
       proofPoints: [
         "Cyclist-built product decisions",
@@ -320,14 +320,14 @@ export async function getLandingContent(): Promise<LandingContent> {
       eyebrow: "Rider feedback",
       title: "The social proof should feel earned, not sprayed everywhere.",
       summary:
-        "A smaller review strip works better here than a giant wall of praise. The point is to reinforce confidence, then get out of the way.",
+        "A short proof strip is enough here. Reinforce confidence, then move shoppers forward.",
       items: legacyTestimonials.slice(0, 3),
     },
     supportHighlights: {
       eyebrow: "Support and trust",
       title: "Everything after the purchase should feel just as clean.",
       summary:
-        "Shipping, returns, privacy, and contact paths stay visible because serious brands do not hide the operational side of the business.",
+        "Shipping, returns, privacy, and contact stay visible because serious brands do not hide the operational side.",
       items: [
         {
           title: "Shipping",
@@ -356,7 +356,7 @@ export async function getLandingContent(): Promise<LandingContent> {
       ],
       b2bCallout: {
         title: "Retail, wholesale, and partnership inquiries",
-        description: "B2B stays intentionally lightweight on the homepage. Shops and partners should start with a direct conversation, not a half-finished portal.",
+        description: "Wholesale and partnership conversations should start with a direct contact path, not a half-built portal.",
         cta: { label: "Start the conversation", href: "/contact" },
       },
     },
@@ -395,7 +395,7 @@ export async function getLandingContent(): Promise<LandingContent> {
       eyebrow: "Stay close",
       title: "Keep the store one click away and support even closer.",
       summary:
-        "Use the footer as the final conversion checkpoint: one route into the store, one route into support, and one quiet path into the newsletter.",
+        "One route to shop. One route to support. One quiet opt-in for updates.",
       primaryCta: { label: "Go to the store", href: storeUrl },
       contactTitle: "Direct support",
       contactBody: "Questions, returns, and rider help route directly to Zevlin support.",
