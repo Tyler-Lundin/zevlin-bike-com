@@ -1,7 +1,6 @@
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { b2bApplicationSchema } from "@zevlin/contracts";
-import { b2bApplications, withDbSessionContext } from "@zevlin/db";
 import { createRequestContext, log } from "@zevlin/observability";
 import {
   appendAuditEvent,
@@ -37,9 +36,10 @@ export async function POST(request: NextRequest) {
           "b2b_contact",
         );
         const payloadHash = hashLookup(parsed.data.contactEmail.toLowerCase(), "b2b_contact");
+        const dbRuntime = await import("@zevlin/db");
 
-        await withDbSessionContext({ system: true }, async (tx) => {
-          await tx.insert(b2bApplications).values({
+        await dbRuntime.withDbSessionContext({ system: true }, async (tx) => {
+          await tx.insert(dbRuntime.b2bApplications).values({
             id: applicationId,
             submittedByCustomerId: null,
             status: "submitted",

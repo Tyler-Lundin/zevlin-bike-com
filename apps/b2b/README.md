@@ -1,9 +1,14 @@
 # @zevlin/b2b
 
-Purpose: B2B application in the Zevlin monorepo.
+Purpose: Wholesale, retail, and partnership inquiry surface for Zevlin.
 
 ## Commands
 
 - `pnpm --filter @zevlin/b2b dev`
 - `pnpm --filter @zevlin/b2b build`
 - `pnpm --filter @zevlin/b2b typecheck`
+
+## Runtime env
+
+- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_STORE_URL`
