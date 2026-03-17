@@ -45,6 +45,18 @@ export async function POST(request: NextRequest) {
           });
         }
 
+        const dbRuntime = await import("@zevlin/db");
+        await dbRuntime.withDbSessionContext({ system: true }, async (tx) => {
+          await tx
+            .update(dbRuntime.shipments)
+            .set({
+              status: "voided",
+              voidedAt: new Date(),
+              updatedAt: new Date(),
+            })
+            .where(dbRuntime.eq(dbRuntime.shipments.id, parsed.data.shipmentId));
+        });
+
         await appendAuditEvent({
           actorId: authorized.userId,
           actorRole: "ops",

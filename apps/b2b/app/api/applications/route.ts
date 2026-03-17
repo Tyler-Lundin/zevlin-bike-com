@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
         }
 
         const applicationId = randomUUID();
+        const leadSubmissionId = randomUUID();
         const encryptedPayload = encryptField(
           JSON.stringify(parsed.data),
           "b2b_contact",
@@ -43,9 +44,58 @@ export async function POST(request: NextRequest) {
             id: applicationId,
             submittedByCustomerId: null,
             status: "submitted",
+            leadSubmissionId,
+            companyName: parsed.data.companyName,
+            contactName: parsed.data.contactName,
+            contactEmail: parsed.data.contactEmail,
+            contactPhone: parsed.data.contactPhone,
+            businessType: parsed.data.businessType,
+            inquiryType: parsed.data.inquiryType,
+            location: parsed.data.location,
+            taxId: parsed.data.taxId,
+            website: parsed.data.website,
+            notes: parsed.data.notes,
             applicationEncrypted: JSON.stringify(encryptedPayload),
             applicationHash: payloadHash,
           });
+
+          await tx.insert(dbRuntime.leadSubmissions).values({
+            id: leadSubmissionId,
+            kind: "b2b_application",
+            status: "new",
+            sourceTable: "b2b_applications",
+            sourceRecordId: applicationId,
+            emailHash: payloadHash,
+            payloadEncrypted: JSON.stringify(encryptedPayload),
+            metadata: {
+              companyName: parsed.data.companyName,
+              inquiryType: parsed.data.inquiryType,
+              businessType: parsed.data.businessType,
+            },
+          });
+
+          await tx
+            .insert(dbRuntime.marketingConsents)
+            .values({
+              leadSubmissionId,
+              emailHash: payloadHash,
+              consentType: "b2b_email",
+              granted: true,
+              source: "b2b.application",
+            })
+            .onConflictDoUpdate({
+              target: [
+                dbRuntime.marketingConsents.emailHash,
+                dbRuntime.marketingConsents.consentType,
+              ],
+              set: {
+                granted: true,
+                source: "b2b.application",
+                leadSubmissionId,
+                revokedAt: null,
+                updatedAt: new Date(),
+              },
+            });
         });
 
         await appendAuditEvent({
@@ -56,6 +106,7 @@ export async function POST(request: NextRequest) {
           resourceId: applicationId,
           metadata: {
             applicationHash: payloadHash,
+            leadSubmissionId,
             encryptionKeyId: encryptedPayload.keyId,
           },
           requestId: context.requestId,

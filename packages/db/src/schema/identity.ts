@@ -2,7 +2,6 @@ import {
   boolean,
   index,
   jsonb,
-  pgEnum,
   pgTable,
   text,
   timestamp,
@@ -10,15 +9,12 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-
-export const roleEnum = pgEnum("role", [
-  "customer",
-  "admin",
-  "ops",
-  "b2b_applicant",
-  "b2b_customer",
-  "team_editor",
-]);
+import {
+  organizationMembershipRoleEnum,
+  organizationMembershipStatusEnum,
+  organizationTypeEnum,
+  roleEnum,
+} from "./enums";
 
 export const customers = pgTable(
   "customers",
@@ -37,6 +33,116 @@ export const customers = pgTable(
   (table) => ({
     emailIndex: uniqueIndex("customers_email_unique").on(table.email),
     phoneHashIndex: index("customers_phone_hash_idx").on(table.phoneHash),
+  }),
+);
+
+export const customerAddresses = pgTable(
+  "customer_addresses",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    customerId: uuid("customer_id")
+      .notNull()
+      .references(() => customers.id, { onDelete: "cascade" }),
+    label: text("label").notNull().default("default"),
+    recipientName: text("recipient_name").notNull(),
+    phoneEncrypted: text("phone_encrypted"),
+    phoneHash: text("phone_hash"),
+    addressEncrypted: text("address_encrypted").notNull(),
+    addressHash: text("address_hash").notNull(),
+    isDefaultShipping: boolean("is_default_shipping").notNull().default(false),
+    isDefaultBilling: boolean("is_default_billing").notNull().default(false),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    customerIdx: index("customer_addresses_customer_idx").on(table.customerId),
+    addressHashIdx: index("customer_addresses_address_hash_idx").on(table.addressHash),
+  }),
+);
+
+export const customerPreferences = pgTable("customer_preferences", {
+  customerId: uuid("customer_id")
+    .primaryKey()
+    .references(() => customers.id, { onDelete: "cascade" }),
+  marketingEmailOptIn: boolean("marketing_email_opt_in").notNull().default(false),
+  marketingSmsOptIn: boolean("marketing_sms_opt_in").notNull().default(false),
+  preferredCurrency: text("preferred_currency").notNull().default("USD"),
+  preferredLocale: text("preferred_locale").notNull().default("en-US"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const organizations = pgTable(
+  "organizations",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    name: text("name").notNull(),
+    slug: text("slug").notNull().unique(),
+    type: organizationTypeEnum("type").notNull(),
+    status: text("status").notNull().default("active"),
+    primaryEmail: text("primary_email"),
+    phoneEncrypted: text("phone_encrypted"),
+    phoneHash: text("phone_hash"),
+    metadata: jsonb("metadata"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    slugUnique: uniqueIndex("organizations_slug_uq").on(table.slug),
+    typeIdx: index("organizations_type_idx").on(table.type),
+  }),
+);
+
+export const organizationMemberships = pgTable(
+  "organization_memberships",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    organizationId: uuid("organization_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    customerId: uuid("customer_id")
+      .notNull()
+      .references(() => customers.id, { onDelete: "cascade" }),
+    role: organizationMembershipRoleEnum("role").notNull(),
+    status: organizationMembershipStatusEnum("status").notNull().default("active"),
+    title: text("title"),
+    invitedByCustomerId: uuid("invited_by_customer_id").references(() => customers.id, {
+      onDelete: "set null",
+    }),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    organizationCustomerRoleUnique: uniqueIndex("organization_memberships_org_customer_role_uq").on(
+      table.organizationId,
+      table.customerId,
+      table.role,
+    ),
+    customerIdx: index("organization_memberships_customer_idx").on(table.customerId),
+  }),
+);
+
+export const organizationLocations = pgTable(
+  "organization_locations",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    organizationId: uuid("organization_id")
+      .notNull()
+      .references(() => organizations.id, { onDelete: "cascade" }),
+    kind: text("kind").notNull().default("shipping"),
+    name: text("name"),
+    email: text("email"),
+    phoneEncrypted: text("phone_encrypted"),
+    phoneHash: text("phone_hash"),
+    addressEncrypted: text("address_encrypted").notNull(),
+    addressHash: text("address_hash").notNull(),
+    isPrimary: boolean("is_primary").notNull().default(false),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    organizationIdx: index("organization_locations_org_idx").on(table.organizationId),
+    addressHashIdx: index("organization_locations_address_hash_idx").on(table.addressHash),
   }),
 );
 

@@ -1,4 +1,58 @@
-import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import { boolean, index, jsonb, pgTable, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { customers, organizations } from "./identity";
+import { consentTypeEnum, leadSubmissionKindEnum, leadSubmissionStatusEnum } from "./enums";
+
+export const leadSubmissions = pgTable(
+  "lead_submissions",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    kind: leadSubmissionKindEnum("kind").notNull(),
+    status: leadSubmissionStatusEnum("status").notNull().default("new"),
+    customerId: uuid("customer_id").references(() => customers.id, { onDelete: "set null" }),
+    organizationId: uuid("organization_id").references(() => organizations.id, {
+      onDelete: "set null",
+    }),
+    sourceTable: text("source_table").notNull(),
+    sourceRecordId: text("source_record_id").notNull(),
+    emailHash: text("email_hash"),
+    payloadEncrypted: text("payload_encrypted").notNull(),
+    metadata: jsonb("metadata"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    sourceUnique: uniqueIndex("lead_submissions_source_uq").on(table.sourceTable, table.sourceRecordId),
+    kindIdx: index("lead_submissions_kind_idx").on(table.kind),
+    customerIdx: index("lead_submissions_customer_idx").on(table.customerId),
+  }),
+);
+
+export const marketingConsents = pgTable(
+  "marketing_consents",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    customerId: uuid("customer_id").references(() => customers.id, { onDelete: "set null" }),
+    leadSubmissionId: uuid("lead_submission_id").references(() => leadSubmissions.id, {
+      onDelete: "set null",
+    }),
+    emailHash: text("email_hash").notNull(),
+    consentType: consentTypeEnum("consent_type").notNull(),
+    granted: boolean("granted").notNull().default(true),
+    source: text("source"),
+    capturedAt: timestamp("captured_at", { withTimezone: true }).defaultNow().notNull(),
+    revokedAt: timestamp("revoked_at", { withTimezone: true }),
+    metadata: jsonb("metadata"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => ({
+    emailConsentUnique: uniqueIndex("marketing_consents_email_type_uq").on(
+      table.emailHash,
+      table.consentType,
+    ),
+    leadSubmissionIdx: index("marketing_consents_lead_submission_idx").on(table.leadSubmissionId),
+  }),
+);
 
 export const marketingNewsletterSignups = pgTable(
   "marketing_newsletter_signups",

@@ -51,6 +51,7 @@ export async function POST(request: NextRequest): Promise<Response> {
         }
 
         const submissionId = randomUUID();
+        const leadSubmissionId = randomUUID();
         const encryptedSubmission = encryptField(JSON.stringify(parsed.data), "generic");
         const emailHash = hashLookup(parsed.data.email, "generic");
 
@@ -60,6 +61,19 @@ export async function POST(request: NextRequest): Promise<Response> {
             submissionEncrypted: JSON.stringify(encryptedSubmission),
             emailHash,
             status: "new",
+          });
+
+          await tx.insert(dbRuntime.leadSubmissions).values({
+            id: leadSubmissionId,
+            kind: "contact",
+            status: "new",
+            sourceTable: "marketing_contact_submissions",
+            sourceRecordId: submissionId,
+            emailHash,
+            payloadEncrypted: JSON.stringify(encryptedSubmission),
+            metadata: {
+              subject: parsed.data.subject,
+            },
           });
         });
 
@@ -83,6 +97,7 @@ export async function POST(request: NextRequest): Promise<Response> {
           resourceId: submissionId,
           metadata: {
             emailHash,
+            leadSubmissionId,
             notificationStatus,
             encryptionKeyId: encryptedSubmission.keyId,
           },

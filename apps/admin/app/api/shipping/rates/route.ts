@@ -102,14 +102,53 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: "Invalid request", issues: parsed.error.issues }, { status: 400 });
         }
 
+        const dbRuntime = await import("@zevlin/db");
         try {
           const raw = await getShippoRates({
             addressFrom: defaultFromAddress,
             addressTo: defaultToAddress,
             parcel: defaultParcel,
           });
+          const rates = normalizeRates(raw);
 
-          return NextResponse.json({ orderId: parsed.data.orderId, rates: normalizeRates(raw) });
+          await dbRuntime.withDbSessionContext({ system: true }, async (tx) => {
+            for (const rate of rates) {
+              await tx
+                .insert(dbRuntime.shipmentRates)
+                .values({
+                  orderId: parsed.data.orderId,
+                  provider: "shippo",
+                  providerRateId: rate.rateObjectId,
+                  carrier: rate.carrier,
+                  service: rate.service,
+                  amountCents: rate.amountCents,
+                  currency: rate.currency,
+                  estimatedDays: rate.estimatedDays,
+                  metadata: {
+                    source: "shippo",
+                  },
+                })
+                .onConflictDoUpdate({
+                  target: [
+                    dbRuntime.shipmentRates.orderId,
+                    dbRuntime.shipmentRates.providerRateId,
+                  ],
+                  set: {
+                    carrier: rate.carrier,
+                    service: rate.service,
+                    amountCents: rate.amountCents,
+                    currency: rate.currency,
+                    estimatedDays: rate.estimatedDays,
+                    metadata: {
+                      source: "shippo",
+                    },
+                    updatedAt: new Date(),
+                  },
+                });
+            }
+          });
+
+          return NextResponse.json({ orderId: parsed.data.orderId, rates });
         } catch (integrationError) {
           log({
             level: "warn",
@@ -121,9 +160,47 @@ export async function POST(request: NextRequest) {
             },
           });
 
+          const rates = localMockRates();
+          await dbRuntime.withDbSessionContext({ system: true }, async (tx) => {
+            for (const rate of rates) {
+              await tx
+                .insert(dbRuntime.shipmentRates)
+                .values({
+                  orderId: parsed.data.orderId,
+                  provider: "manual",
+                  providerRateId: rate.rateObjectId,
+                  carrier: rate.carrier,
+                  service: rate.service,
+                  amountCents: rate.amountCents,
+                  currency: rate.currency,
+                  estimatedDays: rate.estimatedDays,
+                  metadata: {
+                    source: "mock",
+                  },
+                })
+                .onConflictDoUpdate({
+                  target: [
+                    dbRuntime.shipmentRates.orderId,
+                    dbRuntime.shipmentRates.providerRateId,
+                  ],
+                  set: {
+                    carrier: rate.carrier,
+                    service: rate.service,
+                    amountCents: rate.amountCents,
+                    currency: rate.currency,
+                    estimatedDays: rate.estimatedDays,
+                    metadata: {
+                      source: "mock",
+                    },
+                    updatedAt: new Date(),
+                  },
+                });
+            }
+          });
+
           return NextResponse.json({
             orderId: parsed.data.orderId,
-            rates: localMockRates(),
+            rates,
             mode: "mock",
           });
         }

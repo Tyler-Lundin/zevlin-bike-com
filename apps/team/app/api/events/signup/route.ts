@@ -31,6 +31,7 @@ export async function POST(request: NextRequest) {
         }
 
         const signupId = randomUUID();
+        const leadSubmissionId = randomUUID();
         const encryptedPayload = encryptField(
           JSON.stringify(parsed.data),
           "generic",
@@ -45,6 +46,51 @@ export async function POST(request: NextRequest) {
             signupEncrypted: JSON.stringify(encryptedPayload),
             signupHash: payloadHash,
           });
+
+          await tx.insert(dbRuntime.teamEventRegistrations).values({
+            id: signupId,
+            eventId: parsed.data.eventId,
+            status: "pending",
+            registrationEncrypted: JSON.stringify(encryptedPayload),
+            registrationHash: payloadHash,
+          });
+
+          await tx.insert(dbRuntime.leadSubmissions).values({
+            id: leadSubmissionId,
+            kind: "team_event",
+            status: "new",
+            sourceTable: "team_event_registrations",
+            sourceRecordId: signupId,
+            emailHash: payloadHash,
+            payloadEncrypted: JSON.stringify(encryptedPayload),
+            metadata: {
+              eventId: parsed.data.eventId,
+              fullName: parsed.data.fullName,
+            },
+          });
+
+          await tx
+            .insert(dbRuntime.marketingConsents)
+            .values({
+              leadSubmissionId,
+              emailHash: payloadHash,
+              consentType: "team_email",
+              granted: true,
+              source: "team.event.signup",
+            })
+            .onConflictDoUpdate({
+              target: [
+                dbRuntime.marketingConsents.emailHash,
+                dbRuntime.marketingConsents.consentType,
+              ],
+              set: {
+                granted: true,
+                source: "team.event.signup",
+                leadSubmissionId,
+                revokedAt: null,
+                updatedAt: new Date(),
+              },
+            });
         });
 
         await appendAuditEvent({
@@ -56,6 +102,7 @@ export async function POST(request: NextRequest) {
           metadata: {
             eventId: parsed.data.eventId,
             signupHash: payloadHash,
+            leadSubmissionId,
             encryptionKeyId: encryptedPayload.keyId,
           },
           requestId: context.requestId,

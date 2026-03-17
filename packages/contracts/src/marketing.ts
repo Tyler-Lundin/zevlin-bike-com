@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { consentTypeSchema } from "./domain";
 
 export const newsletterSignupSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -47,8 +48,43 @@ export const privacyRequestSchema = z
     }
   });
 
+export const leadSubmissionSchema = z.object({
+  kind: z.enum([
+    "newsletter",
+    "contact",
+    "b2b_application",
+    "team_application",
+    "team_event",
+    "return_request",
+  ]),
+  email: z.string().email().optional(),
+  customerId: z.string().uuid().optional(),
+  organizationId: z.string().uuid().optional(),
+  sourceTable: z.string().min(1),
+  sourceRecordId: z.string().min(1),
+  metadata: z.record(z.string(), z.unknown()).optional(),
+});
+
+export const marketingConsentSchema = z.object({
+  email: z.string().email(),
+  consentType: consentTypeSchema,
+  granted: z.boolean().default(true),
+  source: z.string().max(120).optional(),
+});
+
+export const crmSyncPayloadSchema = z.object({
+  ownerTable: z.string().min(1),
+  ownerId: z.string().min(1),
+  provider: z.string().min(1),
+  syncType: z.string().min(1).default("upsert"),
+  payload: z.record(z.string(), z.unknown()),
+});
+
 export type NewsletterSignupRequest = z.infer<typeof newsletterSignupSchema>;
 export type ContactSubmissionRequest = z.infer<typeof contactSubmissionSchema>;
 export type ReturnRequest = z.infer<typeof returnRequestSchema>;
 export type AnalyticsEventRequest = z.infer<typeof analyticsEventSchema>;
 export type PrivacyRequest = z.infer<typeof privacyRequestSchema>;
+export type LeadSubmission = z.infer<typeof leadSubmissionSchema>;
+export type MarketingConsent = z.infer<typeof marketingConsentSchema>;
+export type CrmSyncPayload = z.infer<typeof crmSyncPayloadSchema>;

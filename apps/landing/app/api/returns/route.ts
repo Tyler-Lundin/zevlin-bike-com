@@ -51,6 +51,8 @@ export async function POST(request: NextRequest): Promise<Response> {
         }
 
         const requestId = randomUUID();
+        const leadSubmissionId = randomUUID();
+        const normalizedReason = parsed.data.message?.trim() || "customer_request";
         const encryptedPayload = encryptField(JSON.stringify(parsed.data), "generic");
         const emailHash = parsed.data.email ? hashLookup(parsed.data.email, "generic") : null;
 
@@ -61,6 +63,32 @@ export async function POST(request: NextRequest): Promise<Response> {
             requestEncrypted: JSON.stringify(encryptedPayload),
             emailHash,
             status: "new",
+          });
+
+          await tx.insert(dbRuntime.returnRequests).values({
+            id: requestId,
+            status: "requested",
+            reason: normalizedReason,
+            requestEncrypted: JSON.stringify(encryptedPayload),
+            emailHash,
+            metadata: {
+              orderNumber: parsed.data.orderNumber,
+              name: parsed.data.name ?? null,
+              message: parsed.data.message ?? null,
+            },
+          });
+
+          await tx.insert(dbRuntime.leadSubmissions).values({
+            id: leadSubmissionId,
+            kind: "return_request",
+            status: "new",
+            sourceTable: "marketing_return_requests",
+            sourceRecordId: requestId,
+            emailHash,
+            payloadEncrypted: JSON.stringify(encryptedPayload),
+            metadata: {
+              orderNumber: parsed.data.orderNumber,
+            },
           });
         });
 
@@ -85,6 +113,7 @@ export async function POST(request: NextRequest): Promise<Response> {
           metadata: {
             orderNumber: parsed.data.orderNumber,
             emailHash,
+            leadSubmissionId,
             notificationStatus,
             encryptionKeyId: encryptedPayload.keyId,
           },

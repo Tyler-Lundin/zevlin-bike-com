@@ -1,4 +1,5 @@
-import { type ZevlinCatalogProduct, zevlinCatalog } from "@zevlin/contracts";
+import { zevlinCatalog } from "@zevlin/db";
+import type { ZevlinCatalogProduct } from "@zevlin/contracts";
 import legacyInventoryData from "./legacy-inventory.json";
 
 export type LandingLink = {

@@ -112,6 +112,10 @@ export async function createStripeCheckoutSession(
     "line_items[0][quantity]": "1",
   });
 
+  for (const [key, value] of Object.entries(input.metadata ?? {})) {
+    body.set(`metadata[${key}]`, value);
+  }
+
   const response = await fetch("https://api.stripe.com/v1/checkout/sessions", {
     method: "POST",
     headers: {

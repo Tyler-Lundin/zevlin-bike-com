@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { b2bQuoteStatusSchema } from "./domain";
 
 export const b2bBusinessTypeSchema = z.enum([
   "bike_shop",
@@ -32,19 +33,40 @@ export const b2bApplicationSchema = z.object({
 });
 
 export const quoteRequestSchema = z.object({
-  accountId: z.string().uuid(),
+  organizationId: z.string().uuid().optional(),
+  accountId: z.string().uuid().optional(),
   items: z
     .array(
       z.object({
         productId: z.string().uuid(),
+        variantId: z.string().uuid().optional(),
         quantity: z.number().int().positive(),
       }),
     )
     .min(1),
   requestedShipDate: z.string().datetime().optional(),
+  notes: z.string().max(2_000).optional(),
+});
+
+export const quoteResponseSchema = z.object({
+  quoteId: z.string().uuid(),
+  status: b2bQuoteStatusSchema,
+  amountCents: z.number().int().nonnegative(),
+  currency: z.string().length(3).default("USD"),
+  validUntil: z.string().datetime().optional(),
+  items: z.array(
+    z.object({
+      productId: z.string().uuid(),
+      variantId: z.string().uuid().optional(),
+      quantity: z.number().int().positive(),
+      unitPriceCents: z.number().int().nonnegative(),
+      lineTotalCents: z.number().int().nonnegative(),
+    }),
+  ),
 });
 
 export type B2bApplicationRequest = z.infer<typeof b2bApplicationSchema>;
 export type QuoteRequest = z.infer<typeof quoteRequestSchema>;
+export type QuoteResponse = z.infer<typeof quoteResponseSchema>;
 export type B2bBusinessType = z.infer<typeof b2bBusinessTypeSchema>;
 export type B2bInquiryType = z.infer<typeof b2bInquiryTypeSchema>;

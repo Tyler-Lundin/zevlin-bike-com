@@ -1,3 +1,4 @@
+import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { AccessDeniedError, requireMfa, requireRole } from "@zevlin/auth";
 import { purchaseLabelSchema } from "@zevlin/contracts";
@@ -65,6 +66,7 @@ export async function POST(request: NextRequest) {
         }
 
         let responsePayload: ReturnType<typeof normalizeLabel> | ReturnType<typeof mockLabel>;
+        let shipmentMode: "shippo" | "manual" = "shippo";
         try {
           const purchased = await purchaseShippoLabel({
             rateObjectId: parsed.data.rateObjectId,
@@ -82,7 +84,55 @@ export async function POST(request: NextRequest) {
             },
           });
           responsePayload = mockLabel(parsed.data.rateObjectId);
+          shipmentMode = "manual";
         }
+        const dbRuntime = await import("@zevlin/db");
+        const shipmentId = randomUUID();
+        await dbRuntime.withDbSessionContext({ system: true }, async (tx) => {
+          await tx.insert(dbRuntime.shipments).values({
+            id: shipmentId,
+            orderId: parsed.data.orderId,
+            provider: shipmentMode,
+            carrier: responsePayload.carrier,
+            service: responsePayload.service,
+            trackingNumber: responsePayload.trackingNumber,
+            trackingUrl: responsePayload.trackingUrl,
+            labelUrl: responsePayload.labelUrl,
+            rateObjectId: parsed.data.rateObjectId,
+            labelObjectId: responsePayload.labelObjectId,
+            status: "purchased",
+            purchasedAt: new Date(),
+            metadata: {
+              source: shipmentMode === "shippo" ? "shippo" : "mock",
+            },
+          });
+
+          await tx
+            .update(dbRuntime.orders)
+            .set({
+              shippingStatus: "label_purchased",
+              fulfillmentStatus: "pending_fulfillment",
+              updatedAt: new Date(),
+            })
+            .where(dbRuntime.eq(dbRuntime.orders.id, parsed.data.orderId));
+
+          await tx
+            .insert(dbRuntime.externalRecordLinks)
+            .values({
+              ownerTable: "shipments",
+              ownerId: shipmentId,
+              provider: shipmentMode,
+              recordType: "transaction",
+              externalId: responsePayload.labelObjectId,
+              url: responsePayload.labelUrl,
+              metadata: {
+                trackingNumber: responsePayload.trackingNumber,
+              },
+              syncedAt: new Date(),
+            })
+            .onConflictDoNothing();
+        });
+
         await appendAuditEvent({
           actorId: authorized.userId,
           actorRole: "ops",
@@ -93,11 +143,15 @@ export async function POST(request: NextRequest) {
             idempotencyKey,
             rateObjectId: parsed.data.rateObjectId,
             labelObjectId: responsePayload.labelObjectId,
+            shipmentId,
           },
           requestId: context.requestId,
         });
 
-        return NextResponse.json(responsePayload);
+        return NextResponse.json({
+          ...responsePayload,
+          shipmentId,
+        });
       },
     );
   } catch (error) {

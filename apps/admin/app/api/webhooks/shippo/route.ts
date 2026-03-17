@@ -66,6 +66,66 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ ok: true, deduped: true });
         }
 
+        const dbRuntime = await import("@zevlin/db");
+        const objectId = parsed.data.object_id ?? null;
+        const trackingNumber =
+          typeof parsed.data.data["tracking_number"] === "string"
+            ? parsed.data.data["tracking_number"]
+            : null;
+
+        await dbRuntime.withDbSessionContext({ system: true }, async (tx) => {
+          await tx
+            .update(dbRuntime.webhookEvents)
+            .set({
+              resourceType: "shipment",
+              payload: parsed.data.data,
+              processedAt: new Date(),
+            })
+            .where(dbRuntime.eq(dbRuntime.webhookEvents.providerEventId, eventId));
+
+          let shipmentId: string | null = null;
+
+          if (objectId) {
+            const byLabel = await tx
+              .select({ id: dbRuntime.shipments.id })
+              .from(dbRuntime.shipments)
+              .where(dbRuntime.eq(dbRuntime.shipments.labelObjectId, objectId))
+              .limit(1);
+            shipmentId = byLabel[0]?.id ?? null;
+          }
+
+          if (!shipmentId && trackingNumber) {
+            const byTracking = await tx
+              .select({ id: dbRuntime.shipments.id })
+              .from(dbRuntime.shipments)
+              .where(dbRuntime.eq(dbRuntime.shipments.trackingNumber, trackingNumber))
+              .limit(1);
+            shipmentId = byTracking[0]?.id ?? null;
+          }
+
+          if (shipmentId) {
+            await tx
+              .insert(dbRuntime.shipmentTrackingEvents)
+              .values({
+                shipmentId,
+                eventCode: parsed.data.event,
+                externalEventId: eventId,
+                description:
+                  typeof parsed.data.data["tracking_status"] === "string"
+                    ? parsed.data.data["tracking_status"]
+                    : parsed.data.event,
+                location:
+                  typeof parsed.data.data["location"] === "string"
+                    ? parsed.data.data["location"]
+                    : null,
+                raw: parsed.data.data,
+              })
+              .onConflictDoNothing({
+                target: [dbRuntime.shipmentTrackingEvents.externalEventId],
+              });
+          }
+        });
+
         await appendAuditEvent({
           actorId: "shippo_webhook",
           actorRole: "system",

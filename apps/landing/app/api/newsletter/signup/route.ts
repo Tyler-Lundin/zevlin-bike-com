@@ -67,6 +67,51 @@ export async function POST(request: NextRequest): Promise<Response> {
 
         const created = inserted.length > 0;
         const signupId = inserted[0]?.id ?? randomUUID();
+        const leadSubmissionId = created ? randomUUID() : null;
+
+        await dbRuntime.withDbSessionContext({ system: true }, async (tx) => {
+          if (created && leadSubmissionId) {
+            await tx.insert(dbRuntime.leadSubmissions).values({
+              id: leadSubmissionId,
+              kind: "newsletter",
+              status: "new",
+              sourceTable: "marketing_newsletter_signups",
+              sourceRecordId: signupId,
+              emailHash,
+              payloadEncrypted: JSON.stringify(encryptedEmail),
+              metadata: {
+                source: parsed.data.source ?? "landing-home",
+              },
+            });
+          }
+
+          await tx
+            .insert(dbRuntime.marketingConsents)
+            .values({
+              emailHash,
+              leadSubmissionId,
+              consentType: "newsletter_email",
+              granted: true,
+              source: parsed.data.source ?? "landing-home",
+              metadata: {
+                intakeRoute: "/api/newsletter/signup",
+              },
+            })
+            .onConflictDoUpdate({
+              target: [
+                dbRuntime.marketingConsents.emailHash,
+                dbRuntime.marketingConsents.consentType,
+              ],
+              set: {
+                granted: true,
+                source: parsed.data.source ?? "landing-home",
+                leadSubmissionId,
+                revokedAt: null,
+                updatedAt: new Date(),
+              },
+            });
+        });
+
         const notificationStatus = created
           ? await sendIntakeNotification(
               {
@@ -91,6 +136,7 @@ export async function POST(request: NextRequest): Promise<Response> {
             source: parsed.data.source ?? "landing-home",
             emailHash,
             notificationStatus,
+            leadSubmissionId,
             encryptionKeyId: encryptedEmail.keyId,
           },
           requestId: context.requestId,

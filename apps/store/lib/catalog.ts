@@ -1,8 +1,8 @@
 import {
   getZevlinCatalogProduct,
   zevlinCatalog,
-  type ZevlinCatalogProduct,
-} from "@zevlin/contracts";
+} from "@zevlin/db";
+import type { ZevlinCatalogProduct } from "@zevlin/contracts";
 import { getShortDescription } from "./commerce";
 
 export type StoreProduct = ZevlinCatalogProduct & {
