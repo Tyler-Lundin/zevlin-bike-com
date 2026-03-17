@@ -1,12 +1,7 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import type { CartItem } from "./StoreProvider";
-import {
-  FREE_SHIPPING_THRESHOLD_CENTS,
-  getFreeShippingProgress,
-  getFreeShippingRemainingCents,
-  toUsd,
-} from "../lib/commerce";
+import { FREE_SHIPPING_THRESHOLD_CENTS, getFreeShippingProgress, getFreeShippingRemainingCents, toUsd } from "../lib/commerce";
 
 export default function OrderSummaryPanel({
   title,

@@ -44,7 +44,8 @@ export default function TeamEventSignupForm({ events }: { events: TeamEventOptio
       if (!response.ok) {
         setSubmissionState({
           status: "error",
-          message: response.status === 429 ? "Too many attempts. Please wait a few minutes." : "Could not submit your signup right now.",
+          message:
+            response.status === 429 ? "Too many attempts. Please wait a few minutes." : "Could not submit your signup right now.",
         });
         return;
       }
@@ -69,6 +70,12 @@ export default function TeamEventSignupForm({ events }: { events: TeamEventOptio
 
   return (
     <form className="team-signup-form" onSubmit={handleSubmit}>
+      <div className="team-form-intro">
+        <p className="team-section-kicker team-section-kicker-tight">Join request</p>
+        <h3>Send one clean signup request.</h3>
+        <p>The team follows up directly with details, questions, or route updates.</p>
+      </div>
+
       <div className="team-form-grid">
         <label className="team-field">
           <span>Session</span>
@@ -94,13 +101,7 @@ export default function TeamEventSignupForm({ events }: { events: TeamEventOptio
 
         <label className="team-field">
           <span>Email</span>
-          <input
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            autoComplete="email"
-            required
-          />
+          <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} autoComplete="email" required />
         </label>
 
         <label className="team-field">

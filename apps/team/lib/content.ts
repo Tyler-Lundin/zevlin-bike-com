@@ -151,15 +151,13 @@ function trimTrailingSlash(value: string): string {
 
 export async function getTeamPageContent(): Promise<TeamPageContent> {
   const siteUrl = trimTrailingSlash(process.env.NEXT_PUBLIC_SITE_URL || "https://www.zevlinbike.com");
-  const storeUrl = trimTrailingSlash(
-    process.env.NEXT_PUBLIC_STORE_URL || "https://store.zevlinbike.com",
-  );
+  const storeUrl = trimTrailingSlash(process.env.NEXT_PUBLIC_STORE_URL || "https://store.zevlinbike.com");
   const teamUrl = trimTrailingSlash(process.env.NEXT_PUBLIC_TEAM_URL || "https://team.zevlinbike.com");
   const contactUrl = `${siteUrl}/contact`;
 
   return {
-    brandName: "Zevlin Cycling Team",
-    brandTagline: "Rides, training, and rider-backed brand credibility.",
+    brandName: "Cycling Team",
+    brandTagline: "Structured rides. Serious community.",
     logoPath: "/images/logo.png",
     siteUrl,
     storeUrl,
@@ -167,141 +165,133 @@ export async function getTeamPageContent(): Promise<TeamPageContent> {
     contactUrl,
     contactEmail: "zevlinbike@gmail.com",
     navLinks: [
-      { label: "Upcoming", href: "#upcoming" },
+      { label: "What it is", href: "#what-it-is" },
+      { label: "Sessions", href: "#sessions" },
       { label: "Join", href: "#join" },
       { label: "FAQ", href: "#faq" },
-      { label: "Shop store", href: storeUrl, variant: "primary" },
+      { label: "Join a session", href: "#join", variant: "primary" },
     ],
     hero: {
-      eyebrow: "Community rides, training sessions, and ride-day support",
-      headline: "Ride with the Zevlin Cycling Team.",
+      eyebrow: "Zevlin Cycling Team",
+      headline: "Structured rides for riders who actually want to keep showing up.",
       subheadline:
-        "A serious local riding group built around consistent sessions, better habits, and products tested by riders who actually put in the miles.",
+        "Open sessions, better pacing, real accountability, and a brand community built around consistent miles rather than club theatrics.",
       points: [
-        "Open ride calendar with structured sessions",
-        "Real rider feedback loop into the Zevlin lineup",
-        "Direct team contact instead of generic community fluff",
+        "Endurance, skills, and pace work with clear expectations",
+        "Open sessions with direct human follow-up",
+        "Product feedback grounded in actual ride days",
       ],
-      primaryCta: { label: "See upcoming sessions", href: "#upcoming" },
-      secondaryCta: { label: "Reserve a spot", href: "#join" },
+      primaryCta: { label: "Reserve a session", href: "#join" },
+      secondaryCta: { label: "See upcoming sessions", href: "#upcoming" },
       imagePath: "/images/team-hero.png",
       imageAlt: "Cyclist riding through a turn in Zevlin team hero art.",
       featureLabel: "What riders get",
       featureBody:
-        "Clear session formats, consistent communication, and a rider-first tone that feels more like a real team than a marketing stunt.",
+        "Session format, ride expectations, and the next step should all be clear before a rider commits.",
     },
     positioning: {
       eyebrow: "What the team is",
-      title: "A riding community with more structure than a casual group ride, and less ego than a race-only program.",
+      title: "A riding group with more structure than a casual meetup and less ego than a race-only program.",
       summary:
-        "The Zevlin Cycling Team exists to create repeatable riding touchpoints: open sessions, training-focused events, community accountability, and honest product feedback from riders who are actually out there doing the work.",
+        "The Zevlin Cycling Team is designed to keep riders connected through repeatable sessions, clear communication, and honest feedback loops from people who actually ride.",
       items: [
         {
-          title: "Open where it makes sense",
-          body:
-            "Public-facing sessions lower the barrier to join, while communication stays clear about what is open, paced, or limited.",
+          title: "Open when it makes sense",
+          body: "Public-facing sessions lower the barrier to join, while the page stays clear about pace, structure, and rider expectations.",
         },
         {
-          title: "Training, not theater",
-          body:
-            "The emphasis is consistency, pacing, handling, and ride-day confidence rather than performative hype or empty club branding.",
+          title: "Training over theater",
+          body: "The emphasis is consistency, handling, pacing, and ride-day confidence rather than empty club branding or false prestige.",
         },
         {
-          title: "Brand proof through real use",
-          body:
-            "The team gives Zevlin a feedback loop rooted in actual ride conditions, not abstract product claims or lifestyle copy.",
+          title: "Real feedback loop",
+          body: "The team keeps Zevlin connected to actual ride conditions so the brand stays grounded in use, not just aesthetics.",
         },
       ],
       imagePath: "/images/team-community.jpeg",
       imageAlt: "Editorial lifestyle image representing the Zevlin cycling community.",
-      caption: "Community rides, session discipline, and rider-first product feedback all belong in the same system.",
+      caption: "The team is where riding discipline, community credibility, and product feedback meet in public.",
     },
     proofStrip: {
-      eyebrow: "Why it matters",
-      title: "The team strengthens the brand because it creates real rider contact, not just brand aesthetics.",
+      eyebrow: "Session rhythm",
+      title: "The team matters because the riding system is visible, repeatable, and easy to understand.",
       items: [
         {
-          title: "Consistent sessions",
-          description:
-            "A team page is only credible if riders can see that the rhythm of rides and training actually exists.",
+          title: "Endurance sessions",
+          description: "Longer steady rides build repeatable volume and give new riders a clear place to start.",
         },
         {
-          title: "Local rider community",
-          description:
-            "The public team surface gives riders a reason to stay connected to Zevlin beyond a one-time purchase.",
+          title: "Skills and pace work",
+          description: "Group handling, paceline rhythm, and short efforts are explained before riders commit.",
         },
         {
-          title: "Faster product feedback",
-          description:
-            "Real riders surface friction, comfort, and recovery insights faster than passive customer comments ever will.",
+          title: "Direct communication",
+          description: "Riders hear from humans, not a membership stack, when plans shift or follow-up is needed.",
+        },
+        {
+          title: "Brand proof through use",
+          description: "Products and support stay tied to real ride days instead of abstract marketing claims.",
         },
       ],
     },
     featuredBlock: {
       eyebrow: "Featured session",
-      title: "A structured ride should tell you what to expect before you clip in.",
-      summary:
-        "Each featured session should communicate format, intensity, location, and the kind of rider it is best for. That keeps the team approachable without making it vague.",
+      title: "A session should tell riders the pace, format, and expectation before they clip in.",
+      summary: "The featured block exists to explain what the next ride feels like, not just when it starts.",
       bullets: [
-        "Clear pace and format expectations",
-        "Regroup logic or intensity notes where relevant",
-        "Direct route or location information",
+        "Clear pacing and regroup expectations",
+        "Location and format before signup",
+        "Simple next step into the join flow",
       ],
-      cta: { label: "Reserve a spot", href: "#join" },
+      cta: { label: "Reserve a session", href: "#join" },
     },
     upcoming: {
-      eyebrow: "Upcoming sessions",
-      title: "The next rides on deck",
-      summary:
-        "Use this section to see what is coming up next. Live events appear automatically when team content is available, with clean fallback sessions when it is not.",
+      eyebrow: "Upcoming",
+      title: "The next sessions on deck",
+      summary: "Use this section to scan what is coming up next without digging through noisy event chrome.",
     },
     joinSection: {
       eyebrow: "Join or inquire",
-      title: "Reserve a session without turning this into a complicated membership flow.",
+      title: "Send one request and the team follows up directly.",
       summary:
-        "The fastest credible version is simple: pick an upcoming session, send your details, and let the team follow up like humans instead of forcing a full account system too early.",
+        "Pick the session that fits, send the essentials, and let the team respond like humans instead of forcing a full account system too early.",
       points: [
-        "Select the ride or session you want",
-        "Share the essentials so the team can reply directly",
-        "Use contact for broader team, sponsor, or collaboration questions",
+        "Choose the session you want",
+        "Share the essentials for follow-up",
+        "Use contact for sponsor, media, or broader team questions",
       ],
-      contactCta: { label: "Contact the team", href: contactUrl },
+      contactCta: { label: "Email the team", href: contactUrl },
       note: "Submitting this form sends a signup request to the team intake workflow. No payment is required here.",
     },
     faq: {
       eyebrow: "Rider expectations",
-      title: "Common questions before riders show up",
+      title: "Common questions before riders show up.",
       items: [
         {
           question: "Do I need to race to ride with the team?",
-          answer:
-            "No. The team is built around structured riding and community accountability, not only race-day participation.",
+          answer: "No. The team is built around structured riding and community accountability, not race-only participation.",
         },
         {
           question: "Are sessions open to new riders?",
-          answer:
-            "Some sessions are openly accessible and some may have pacing or participation expectations. The page should make that clear before signup.",
+          answer: "Some sessions are openly accessible and some may have pacing expectations. The page should make that visible before signup.",
         },
         {
           question: "What kind of riding does the team focus on?",
-          answer:
-            "Expect a mix of endurance sessions, group skills, pace work, and ride-day support depending on the published schedule.",
+          answer: "Expect a mix of endurance sessions, group skills, pace work, and ride-day support depending on the published schedule.",
         },
         {
-          question: "What if I want to talk about partnerships or support instead?",
-          answer:
-            "Use the direct contact path for sponsor, partnership, media, or broader team questions so the right person can respond.",
+          question: "What if I need to ask about support or partnerships instead?",
+          answer: "Use the direct contact path for sponsor, partnership, media, or broader team questions so the right person can respond.",
         },
       ],
     },
     footer: {
-      title: "More than a calendar, less than a vanity project.",
-      summary:
-        "The team should reinforce why Zevlin is credible: riders, products, support, and community all pointing in the same direction.",
+      title: "Built for riders, not club theater.",
+      summary: "The team should reinforce why Zevlin feels credible: riders, products, support, and community all moving in the same direction.",
       links: [
         { label: "Back to Zevlin", href: siteUrl },
         { label: "Shop the store", href: storeUrl },
-        { label: "Contact support", href: contactUrl },
+        { label: "Contact the team", href: contactUrl },
       ],
     },
   };
@@ -320,9 +310,7 @@ export async function getUpcomingTeamEvents(): Promise<TeamEvent[]> {
       limit: 6,
     });
 
-    const normalized = rows
-      .map(normalizeEvent)
-      .filter((event): event is TeamEvent => event !== null);
+    const normalized = rows.map(normalizeEvent).filter((event): event is TeamEvent => event !== null);
 
     if (normalized.length > 0) {
       return normalized;

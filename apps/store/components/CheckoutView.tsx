@@ -5,11 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { CreateOrderRequest } from "@zevlin/contracts";
 import OrderSummaryPanel from "./OrderSummaryPanel";
-import {
-  createEmptyCheckoutDraft,
-  useStore,
-  type CheckoutDraft,
-} from "./StoreProvider";
+import { createEmptyCheckoutDraft, useStore, type CheckoutDraft } from "./StoreProvider";
 import { getShippingCents, getSubtotalCents, getTotalCents } from "../lib/commerce";
 
 type AddressField = keyof CheckoutDraft["shippingAddress"];
@@ -100,13 +96,7 @@ function AddressFields({
 }
 
 export default function CheckoutView({ cancelled = false }: { cancelled?: boolean }) {
-  const {
-    cart,
-    hydrated,
-    checkoutDraft,
-    saveCheckoutDraft,
-    setLastCheckout,
-  } = useStore();
+  const { cart, hydrated, checkoutDraft, saveCheckoutDraft, setLastCheckout } = useStore();
   const [draft, setDraft] = useState<CheckoutDraft>(createEmptyCheckoutDraft());
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -175,12 +165,12 @@ export default function CheckoutView({ cancelled = false }: { cancelled?: boolea
 
     try {
       const shippingAddress = normalizeAddress(draft.shippingAddress);
-      const billingAddress = draft.sameAsShipping
-        ? { ...shippingAddress }
-        : normalizeAddress(draft.billingAddress);
+      const billingAddress = draft.sameAsShipping ? { ...shippingAddress } : normalizeAddress(draft.billingAddress);
       const payload: CreateOrderRequest = {
         customerId: null,
         source: "store",
+        currency: "USD",
+        email: shippingAddress.email,
         shippingAddress,
         billingAddress,
         items: cart.map((item) => ({
@@ -224,8 +214,8 @@ export default function CheckoutView({ cancelled = false }: { cancelled?: boolea
 
   if (!hydrated) {
     return (
-      <div className="page-stack">
-        <div className="section-heading">
+      <div className="page-stack store-route-stack">
+        <div className="store-frame section-heading">
           <p className="section-kicker">Checkout</p>
           <h1>Preparing secure checkout.</h1>
         </div>
@@ -235,13 +225,13 @@ export default function CheckoutView({ cancelled = false }: { cancelled?: boolea
 
   if (cart.length === 0) {
     return (
-      <div className="page-stack">
-        <div className="section-heading">
+      <div className="page-stack store-route-stack">
+        <div className="store-frame section-heading section-heading-wide">
           <p className="section-kicker">Checkout</p>
-          <h1>No items ready for checkout.</h1>
-          <p className="section-body">Add products to the bag first, then return here for payment.</p>
+          <h1>No items are ready for payment.</h1>
+          <p className="section-body">Add products to the bag first, then return here to complete the order.</p>
         </div>
-        <div className="surface-card empty-state-card">
+        <div className="store-frame surface-card empty-state-card">
           <Link href="/" className="button-primary">
             Back to catalog
           </Link>
@@ -251,47 +241,40 @@ export default function CheckoutView({ cancelled = false }: { cancelled?: boolea
   }
 
   return (
-    <div className="page-stack">
-      <div className="section-heading">
+    <div className="page-stack store-route-stack">
+      <div className="store-frame section-heading section-heading-wide">
         <p className="section-kicker">Checkout</p>
-        <h1>One clear step before payment.</h1>
-        <p className="section-body">Enter shipping and billing details here, then finish securely in Stripe Checkout.</p>
+        <h1>One clear step before Stripe.</h1>
+        <p className="section-body">Enter shipping and billing details here, then finish payment securely in hosted Stripe Checkout.</p>
       </div>
 
       {cancelled ? (
-        <div className="surface-card status-banner">
+        <div className="store-frame surface-card status-banner">
           <p>You returned from Stripe. Your bag and address details are still here.</p>
         </div>
       ) : null}
 
-      <section className="checkout-note-grid" aria-label="Checkout notes">
+      <section className="store-frame checkout-note-grid" aria-label="Checkout notes">
         <article className="surface-card checkout-note-card">
           <p className="section-kicker">Shipping</p>
-          <h2>Free over threshold</h2>
-          <p className="form-note">
-            Orders above the free-shipping threshold move through checkout without added shipping cost.
-          </p>
+          <h2>Free above the threshold.</h2>
+          <p className="form-note">The summary updates before payment so the shipping total stays clear.</p>
         </article>
         <article className="surface-card checkout-note-card">
           <p className="section-kicker">Returns</p>
-          <h2>30-day policy</h2>
-          <p className="form-note">Returns stay straightforward, visible, and routed into direct Zevlin support.</p>
+          <h2>30-day handling.</h2>
+          <p className="form-note">Returns route into direct Zevlin support instead of a layered portal.</p>
         </article>
         <article className="surface-card checkout-note-card">
           <p className="section-kicker">Payment</p>
-          <h2>Hosted Stripe flow</h2>
-          <p className="form-note">Card entry and payment confirmation happen in Stripe after this step.</p>
+          <h2>Hosted by Stripe.</h2>
+          <p className="form-note">Card entry and payment confirmation happen after this form, not on this page.</p>
         </article>
       </section>
 
-      <form id="store-checkout-form" className="checkout-layout" onSubmit={handleSubmit}>
+      <form id="store-checkout-form" className="store-frame checkout-layout" onSubmit={handleSubmit}>
         <section className="surface-card checkout-form-card">
-          <AddressFields
-            legend="Shipping address"
-            address={draft.shippingAddress}
-            onChange={updateShippingAddress}
-            requireEmail
-          />
+          <AddressFields legend="Shipping address" address={draft.shippingAddress} onChange={updateShippingAddress} requireEmail />
 
           <label className="checkbox-row">
             <input
@@ -301,35 +284,28 @@ export default function CheckoutView({ cancelled = false }: { cancelled?: boolea
                 setDraft((current) => ({
                   ...current,
                   sameAsShipping: event.target.checked,
-                  billingAddress: event.target.checked
-                    ? { ...current.shippingAddress }
-                    : current.billingAddress,
+                  billingAddress: event.target.checked ? { ...current.shippingAddress } : current.billingAddress,
                 }))
               }
             />
-            <span>Billing address is the same as shipping</span>
+            <span>Billing address matches shipping</span>
           </label>
 
           {!draft.sameAsShipping ? (
-            <AddressFields
-              legend="Billing address"
-              address={draft.billingAddress}
-              onChange={updateBillingAddress}
-              requireEmail={false}
-            />
+            <AddressFields legend="Billing address" address={draft.billingAddress} onChange={updateBillingAddress} requireEmail={false} />
           ) : null}
 
           {error ? <p className="form-error">{error}</p> : null}
         </section>
 
         <OrderSummaryPanel
-          title="Secure payment"
+          title="Ready for payment"
           items={cart}
           subtotalCents={subtotalCents}
           shippingCents={shippingCents}
           totalCents={totalCents}
           sticky
-          note="Payment is completed in hosted Stripe Checkout. Taxes are not applied in this v1 flow."
+          note="Taxes are not applied in this v1 flow. Payment completes in hosted Stripe Checkout."
           actionSlot={
             <button type="submit" className="button-primary button-block" disabled={submitting}>
               {submitting ? "Redirecting..." : "Continue to Stripe Checkout"}
