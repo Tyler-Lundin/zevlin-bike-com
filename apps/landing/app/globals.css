@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  --font-heading: "Impact", "Haettenschweiler", "Franklin Gothic Heavy", sans-serif;
+  --font-heading: "Arial Black", "Impact", "Haettenschweiler", "Franklin Gothic Heavy", sans-serif;
   --font-display:
     "Arial Narrow",
     "Roboto Condensed",
@@ -288,7 +288,7 @@ a {
   gap: 12px;
   padding-top: 6px;
   color: #fff;
-  max-width: 620px;
+  max-width: 700px;
 }
 
 .hero-overline {
@@ -316,14 +316,14 @@ a {
 .hero-headline {
   display: grid;
   justify-items: start;
-  gap: clamp(0.08rem, 0.25vw, 0.18rem);
+  gap: clamp(0.06rem, 0.22vw, 0.16rem);
   width: fit-content;
-  max-width: min(100%, 8.4ch);
-  font-size: clamp(4.35rem, 11vw, 8.75rem);
-  font-weight: 700;
-  line-height: 0.8;
-  font-family: var(--font-display);
-  letter-spacing: -0.035em;
+  max-width: min(100%, 9.2ch);
+  font-size: clamp(5.2rem, 13.6vw, 11.2rem);
+  font-weight: 900;
+  line-height: 0.74;
+  font-family: var(--font-heading);
+  letter-spacing: -0.06em;
   color: var(--hero-text-headline);
   text-shadow: 0 8px 28px rgba(0, 0, 0, 0.24);
 }
@@ -333,28 +333,29 @@ a {
 }
 
 .hero-headline-line-primary {
-  line-height: 0.78;
-  letter-spacing: -0.055em;
+  line-height: 0.72;
+  font-weight: 900;
+  letter-spacing: -0.085em;
   text-transform: uppercase;
 }
 
 .hero-headline-line-connector {
-  margin: 0.08em 0 0.14em;
-  padding-left: 0.42em;
-  font-family: var(--font-editorial);
-  font-size: 0.235em;
-  font-style: italic;
-  font-weight: 600;
-  line-height: 0.92;
-  letter-spacing: 0.01em;
-  text-transform: none;
+  margin: 0.02em 0 0.08em;
+  padding-left: 0.12em;
+  font-family: var(--font-heading);
+  font-size: 0.34em;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 0.82;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--hero-text-highlight);
   white-space: nowrap;
 }
 
 .hero-headline-line-secondary {
-  color: #274f74;
-  padding-left: 0.06em;
+  color: #22486c;
+  padding-left: 0.04em;
 }
 
 .hero-subheadline {
@@ -1555,7 +1556,7 @@ h4 {
   }
 
   .hero-headline {
-    max-width: 8.8ch;
+    max-width: 9.4ch;
   }
 
   .hero-visual-column {
@@ -1600,13 +1601,13 @@ h4 {
   }
 
   .hero-headline {
-    max-width: 8.6ch;
-    font-size: clamp(3.45rem, 15.2vw, 5.75rem);
+    max-width: 9.2ch;
+    font-size: clamp(4.4rem, 17vw, 7.4rem);
   }
 
   .hero-headline-line-connector {
-    padding-left: 0.3em;
-    font-size: 0.25em;
+    padding-left: 0.14em;
+    font-size: 0.32em;
   }
 
   .hero-subheadline {
@@ -1671,19 +1672,19 @@ h4 {
   }
 
   .hero-headline {
-    max-width: 8.2ch;
-    gap: 0.02em;
-    font-size: clamp(3.05rem, 16.5vw, 4.9rem);
+    max-width: 9ch;
+    gap: 0.01em;
+    font-size: clamp(3.85rem, 18vw, 6.1rem);
   }
 
   .hero-headline-line-primary {
-    line-height: 0.8;
+    line-height: 0.72;
   }
 
   .hero-headline-line-connector {
-    margin: 0.14em 0 0.16em;
-    padding-left: 0.24em;
-    font-size: 0.27em;
+    margin: 0.06em 0 0.12em;
+    padding-left: 0.12em;
+    font-size: 0.31em;
   }
 
   .hero-subheadline {
