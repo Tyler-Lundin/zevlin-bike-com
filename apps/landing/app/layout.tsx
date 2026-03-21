@@ -1,10 +1,16 @@
 import "./globals.css";
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
+import { Anton } from "next/font/google";
 import GoogleAnalytics from "./components/analytics/GoogleAnalytics";
 import PageViewTracker from "./components/analytics/PageViewTracker";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.zevlinbike.com";
+const legacyHeroFont = Anton({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-legacy-hero",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -53,7 +59,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className={legacyHeroFont.variable}>
         <main className="landing-shell">{children}</main>
         <PageViewTracker />
         <GoogleAnalytics />

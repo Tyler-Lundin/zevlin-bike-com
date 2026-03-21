@@ -322,7 +322,7 @@ a {
   font-size: clamp(5.2rem, 13.6vw, 11.2rem);
   font-weight: 900;
   line-height: 0.74;
-  font-family: var(--font-heading);
+  font-family: var(--font-legacy-hero), var(--font-heading);
   letter-spacing: -0.06em;
   color: var(--hero-text-headline);
   text-shadow: 0 8px 28px rgba(0, 0, 0, 0.24);
@@ -342,7 +342,7 @@ a {
 .hero-headline-line-connector {
   margin: 0.02em 0 0.08em;
   padding-left: 0.12em;
-  font-family: var(--font-heading);
+  font-family: inherit;
   font-size: 0.34em;
   font-style: normal;
   font-weight: 900;
