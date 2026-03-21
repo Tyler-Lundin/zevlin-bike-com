@@ -34,7 +34,7 @@ export default async function HomePage() {
   const content = await getLandingContent();
   const siteUrl = trimTrailingSlash(process.env.NEXT_PUBLIC_SITE_URL || "https://www.zevlinbike.com");
   const getStoreProductHref = (slug: string) => `${content.storeUrl}/products/${slug}`;
-  const featuredProductSlug = content.hero.featuredProductSlug;
+  const featuredProductSlug = content.hero.carouselProductSlugs[0] ?? content.products[0]?.slug ?? "";
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",

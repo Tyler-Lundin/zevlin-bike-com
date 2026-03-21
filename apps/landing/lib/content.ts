@@ -10,6 +10,16 @@ export type LandingLink = {
 
 export type LandingProduct = ZevlinCatalogProduct;
 
+export type LandingNotice = {
+  id: string;
+  title?: string;
+  message: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  dismissible?: boolean;
+  rotationIntervalMs?: number;
+};
+
 export type LandingTestimonial = {
   name: string;
   title: string;
@@ -51,17 +61,16 @@ export type LandingContent = {
   logoPath: string;
   storeUrl: string;
   teamUrl: string;
+  announcementBar: {
+    items: LandingNotice[];
+  };
   hero: {
-    eyebrow: string;
     headline: string;
-    subheadline: string;
+    tagline: string;
     primaryCta: LandingLink;
-    secondaryCta: LandingLink;
-    trustChips: string[];
-    shippingBadge: string;
-    featuredProductSlug: string;
-    supportingProductSlugs: string[];
-    microTestimonial: LandingTestimonial;
+    freeShippingText: string;
+    carouselProductSlugs: string[];
+    scrollCueLabel: string;
     backgroundImagePath: string;
   };
   navLinks: LandingLink[];
@@ -193,36 +202,34 @@ export async function getLandingContent(): Promise<LandingContent> {
     logoPath: "/images/logo.png",
     storeUrl,
     teamUrl,
-    hero: {
-      eyebrow: "Legacy energy, rebuilt for the long ride",
-      headline: "Goods for your Goods",
-      subheadline:
-        "Natural rider-care formulas and direct human support for cyclists who want to ride, not think about saddle misery.",
-      primaryCta: { label: "Shop the store", href: storeUrl },
-      secondaryCta: { label: "See the lineup", href: "#products" },
-      trustChips: [
-        "Natural formulas",
-        "Free shipping over $49",
-        "30-day returns",
+    announcementBar: {
+      items: [
+        {
+          id: "free-shipping",
+          title: "Free Shipping",
+          message: "Orders over $49 ship free and go straight into the store checkout flow.",
+          ctaLabel: "Shop now",
+          ctaHref: storeUrl,
+          dismissible: true,
+          rotationIntervalMs: 6000,
+        },
       ],
-      shippingBadge: "Free shipping on orders over $49",
-      featuredProductSlug: "crack-chamois-cream",
-      supportingProductSlugs: ["super-crack-chamois-cream", "byot-fitness-wash"],
-      microTestimonial: {
-        name: "Verified rider",
-        title: "Crack Chamois customer",
-        quote: "Made the ride about the ride again.",
-        rating: legacyTestimonials[0]?.rating ?? 5,
-      },
+    },
+    hero: {
+      headline: "Goods for your Goods",
+      tagline: "Zevlin. Riding without it, is just nuts",
+      primaryCta: { label: "Shop Zevlin Gear", href: storeUrl },
+      freeShippingText: "Free Shipping on orders over $49",
+      carouselProductSlugs: ["crack-chamois-cream", "super-crack-chamois-cream"],
+      scrollCueLabel: "Scroll to explore",
       backgroundImagePath: "/images/hero-image.png",
     },
     navLinks: [
+      { label: "Home", href: "#home" },
       { label: "Products", href: "#products" },
-      { label: "Guide", href: "#guide" },
       { label: "Team", href: "#team" },
-      { label: "Support", href: "#support" },
+      { label: "Contact", href: "/contact" },
       { label: "FAQ", href: "#faq" },
-      { label: "Store", href: storeUrl, variant: "primary" },
     ],
     products: legacyProducts,
     proofStrip: {

@@ -1,223 +1,148 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { LandingContent, LandingProduct } from "../../lib/content";
 import LandingNav from "../nav/LandingNav";
-import {
-  getProductMark,
-  getProductTone,
-  getShortDescription,
-  toUsd,
-} from "../../lib/productPresentation";
+import { toUsd } from "../../lib/productPresentation";
 
-function renderHeadline(headline: string): ReactNode {
-  const match = headline.match(/^(.*?)(for your)(.*)$/i);
-  if (!match) {
-    return headline;
+function findCarouselProducts(products: LandingProduct[], slugs: string[]) {
+  const matches = slugs
+    .map((slug) => products.find((product) => product.slug === slug))
+    .filter((product): product is LandingProduct => Boolean(product));
+
+  if (matches.length > 0) {
+    return matches;
   }
 
-  const [, lead, connector, tail] = match;
-
-  return (
-    <>
-      <span className="hero-headline-line hero-headline-line-primary">{lead.trim()}</span>
-      <span className="hero-headline-line hero-headline-line-connector">{connector}</span>
-      <span className="hero-headline-line hero-headline-line-primary hero-headline-line-secondary">
-        {tail.trim()}
-      </span>
-    </>
-  );
-}
-
-function findProduct(products: LandingProduct[], slug: string): LandingProduct {
-  return products.find((product) => product.slug === slug) ?? products[0];
+  return products.slice(0, 1);
 }
 
 export default function LandingHero({ content }: { content: LandingContent }) {
-  const featuredProduct = findProduct(content.products, content.hero.featuredProductSlug);
-  const supportingProducts = content.hero.supportingProductSlugs
-    .map((slug) => content.products.find((product) => product.slug === slug))
-    .filter((product): product is LandingProduct => Boolean(product))
-    .slice(0, 2);
-  const featuredProductHref = `${content.storeUrl}/products/${featuredProduct.slug}`;
-  const trustRail = [
-    {
-      href: "/shipping",
-      eyebrow: "Shipping",
-      title: "Free shipping over $49",
-      body: "Straightforward delivery windows and tracking that actually helps.",
-    },
-    {
-      href: "/returns",
-      eyebrow: "Returns",
-      title: "30-day rider-friendly returns",
-      body: "Opened or not, Zevlin support helps riders get the right outcome.",
-    },
-    {
-      href: "/privacy/request",
-      eyebrow: "Privacy",
-      title: "Privacy-safe support",
-      body: "Rights requests and intake data are handled through audited workflows.",
-    },
-    {
-      href: "/contact",
-      eyebrow: "Support",
-      title: "Talk to a real human",
-      body: `Questions go to ${content.contact.email} and route directly to support.`,
-    },
-  ];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [showCue, setShowCue] = useState(true);
+  const [paused, setPaused] = useState(false);
+
+  const carouselProducts = useMemo(
+    () => findCarouselProducts(content.products, content.hero.carouselProductSlugs).slice(0, 2),
+    [content.products, content.hero.carouselProductSlugs],
+  );
+
+  const activeProduct = carouselProducts[activeIndex] ?? carouselProducts[0] ?? null;
+
+  useEffect(() => {
+    if (carouselProducts.length < 2 || paused) {
+      return;
+    }
+
+    const interval = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % carouselProducts.length);
+    }, 6000);
+
+    return () => window.clearInterval(interval);
+  }, [carouselProducts.length, paused]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowCue(window.scrollY <= 40);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <div className="hero-shell" id="home">
       <LandingNav
         brandName={content.brandName}
-        brandTagline={content.brandTagline}
         logoPath={content.logoPath}
         navLinks={content.navLinks}
+        storeUrl={content.storeUrl}
+        announcementItems={content.announcementBar.items}
       />
 
-      <section className="hero-stage" aria-labelledby="hero-heading">
-        <div className="hero-atmosphere" aria-hidden="true">
+      <section className="hero-stage old-hero-stage" aria-labelledby="hero-heading">
+        <div className="old-hero-background" aria-hidden="true">
           <Image
             src={content.hero.backgroundImagePath}
             alt=""
             fill
             priority
             sizes="100vw"
-            className="hero-rider-image"
+            className="old-hero-background-image"
           />
-          <div className="hero-copy-scrim" />
-          <div className="hero-dot-grid" />
-          <div className="hero-wash hero-wash-left" />
-          <div className="hero-wash hero-wash-right" />
-          <div className="hero-road-glow" />
+          <div className="old-hero-background-gradient" />
+          <div className="old-hero-background-sidefade" />
+          <div className="old-hero-background-bottomfade" />
+          <div className="old-hero-dot-grid" />
         </div>
 
-        <div className="hero-stage-grid">
-          <div className="hero-copy-column">
-            <p className="hero-overline">{content.hero.eyebrow}</p>
-            <h1 id="hero-heading" className="hero-headline">
-              {renderHeadline(content.hero.headline)}
+        <div className="old-hero-inner">
+          <div className="old-hero-copy">
+            <h1 id="hero-heading" className="old-hero-headline">
+              Goods <span className="old-hero-headline-connector">for your</span> Goods
             </h1>
-            <p className="hero-subheadline">{content.hero.subheadline}</p>
-
-            <div className="hero-actions">
-              <Link className="hero-primary-action" href={content.hero.primaryCta.href}>
-                {content.hero.primaryCta.label}
-              </Link>
-              <Link className="hero-secondary-action" href={content.hero.secondaryCta.href}>
-                {content.hero.secondaryCta.label}
-              </Link>
-            </div>
-
-            <ul className="hero-chip-list" aria-label="Trust signals">
-              {content.hero.trustChips.map((chip) => (
-                <li key={chip} className="hero-chip">
-                  {chip}
-                </li>
-              ))}
-            </ul>
-
-            <blockquote className="hero-quote-card">
-              <p className="stars">{"*".repeat(content.hero.microTestimonial.rating)}</p>
-              <p className="hero-quote-copy">&ldquo;{content.hero.microTestimonial.quote}&rdquo;</p>
-              <p className="hero-quote-byline">
-                <span className="hero-quote-name">{content.hero.microTestimonial.name}</span>
-                <span className="hero-quote-role">{content.hero.microTestimonial.title}</span>
-              </p>
-            </blockquote>
+            <p className="old-hero-tagline">{content.hero.tagline}</p>
+            <Link href={content.hero.primaryCta.href} className="old-hero-cta">
+              {content.hero.primaryCta.label}
+            </Link>
           </div>
 
-          <div className="hero-visual-column">
-            <p className="hero-shipping-badge">{content.hero.shippingBadge}</p>
+          <div className="old-hero-products">
+            <p className="old-hero-shipping-pill">{content.hero.freeShippingText}</p>
 
-            <article className="hero-spotlight" style={getProductTone(featuredProduct.slug)}>
-              <div className="hero-product-vessel">
-                <div className="hero-product-orbit" />
-                <div className="hero-product-core">
-                  <div className="hero-product-sticker">
-                    <Image
-                      src={content.logoPath}
-                      alt=""
-                      width={36}
-                      height={36}
-                      className="hero-product-logo"
-                    />
-                    <span>{featuredProduct.media.label}</span>
-                  </div>
-                  <div className="hero-product-image-frame">
-                    <Image
-                      src={featuredProduct.media.imagePath}
-                      alt={featuredProduct.media.imageAlt}
-                      fill
-                      priority
-                      sizes="(min-width: 1120px) 34vw, 92vw"
-                      className="hero-product-image"
-                    />
-                  </div>
-                  <div className="hero-product-caption">
-                    <p className="hero-product-mark">{getProductMark(featuredProduct.name)}</p>
-                    <p className="hero-product-type">{featuredProduct.name}</p>
-                  </div>
-                </div>
-                <span className="hero-price-tag">{toUsd(featuredProduct.priceCents)}</span>
-              </div>
-
-              <div className="hero-spotlight-copy">
-                <p className="hero-spotlight-kicker">Featured formula</p>
-                <h2>{featuredProduct.name}</h2>
-                <p>{getShortDescription(featuredProduct.description)}</p>
-                <Link className="hero-inline-link" href={featuredProductHref}>
-                  Open in store
-                </Link>
-              </div>
-            </article>
-
-            <div className="hero-supporting-grid">
-              {supportingProducts.map((product) => {
-                const productHref = `${content.storeUrl}/products/${product.slug}`;
-
-                return (
-                  <Link
-                    key={product.id}
-                    href={productHref}
-                    className="hero-support-card"
-                    style={getProductTone(product.slug)}
-                  >
-                    <div className="hero-support-visual">
+            {activeProduct ? (
+              <div
+                className="old-hero-carousel"
+                onMouseEnter={() => setPaused(true)}
+                onMouseLeave={() => setPaused(false)}
+                onFocus={() => setPaused(true)}
+                onBlur={() => setPaused(false)}
+                tabIndex={0}
+                aria-label="Featured products"
+              >
+                <div className="old-hero-product-stage" key={activeProduct.id}>
+                  <div className="old-hero-product-card">
+                    <div className="old-hero-product-glow" />
+                    <div className="old-hero-product-image-shell">
                       <Image
-                        src={product.media.imagePath}
-                        alt={product.media.imageAlt}
+                        src={activeProduct.media.imagePath}
+                        alt={activeProduct.media.imageAlt}
                         fill
-                        sizes="(min-width: 1120px) 16vw, 90vw"
-                        className="hero-support-image"
+                        sizes="(min-width: 1200px) 32vw, (min-width: 768px) 42vw, 60vw"
+                        className="old-hero-product-image"
                       />
                     </div>
-                    <div className="hero-support-copy">
-                      <p className="hero-support-kicker">{product.media.label}</p>
-                      <h3>{product.name}</h3>
-                      <p>{getShortDescription(product.description)}</p>
-                    </div>
-                    <div className="hero-support-meta">
-                      <span className="hero-support-mark">{getProductMark(product.name)}</span>
-                      <span className="hero-support-price">{toUsd(product.priceCents)}</span>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
+                    <span className="old-hero-product-price">{toUsd(activeProduct.priceCents)}</span>
+                  </div>
+                </div>
+                <p className="old-hero-product-name">{activeProduct.name}</p>
+              </div>
+            ) : null}
           </div>
         </div>
-      </section>
 
-      <section className="hero-trust-rail" aria-label="Trust and support">
-        {trustRail.map((item) => (
-          <Link key={item.href} href={item.href} className="trust-rail-card">
-            <p className="trust-rail-eyebrow">{item.eyebrow}</p>
-            <h3 className="trust-rail-title">{item.title}</h3>
-            <p className="trust-rail-body">{item.body}</p>
-          </Link>
-        ))}
+        {showCue ? (
+          <div className="old-hero-scroll-cue" aria-hidden="true">
+            <span>{content.hero.scrollCueLabel}</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 5v14" />
+              <path d="m19 12-7 7-7-7" />
+            </svg>
+          </div>
+        ) : null}
       </section>
     </div>
   );

@@ -1,38 +1,96 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { LandingLink } from "../../lib/content";
+import type { LandingLink, LandingNotice } from "../../lib/content";
 
-const SCROLL_THRESHOLD = 56;
-const DESKTOP_BREAKPOINT = 1024;
+const SCROLL_THRESHOLD = 75;
+const DESKTOP_BREAKPOINT = 768;
+
+function StoreIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="9" cy="21" r="1" />
+      <circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="m18 6-12 12" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
+function MenuIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M4 12h16" />
+      <path d="M4 6h16" />
+      <path d="M4 18h16" />
+    </svg>
+  );
+}
 
 export default function LandingNav({
   brandName,
-  brandTagline,
   logoPath,
   navLinks,
+  storeUrl,
+  announcementItems,
 }: {
   brandName: string;
-  brandTagline: string;
   logoPath: string;
   navLinks: LandingLink[];
+  storeUrl: string;
+  announcementItems: LandingNotice[];
 }) {
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [bannerDismissed, setBannerDismissed] = useState(false);
+  const [noticeIndex, setNoticeIndex] = useState(0);
 
-  const { primaryLink, secondaryLinks } = useMemo(() => {
-    const primary = navLinks.find((item) => item.variant === "primary") ?? null;
-    const secondary = navLinks.filter((item) => item.variant !== "primary");
-
-    return {
-      primaryLink: primary,
-      secondaryLinks: secondary,
-    };
-  }, [navLinks]);
+  const activeNotice = announcementItems[noticeIndex] ?? null;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,19 +99,18 @@ export default function LandingNav({
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
-    setIsDrawerOpen(false);
+    setIsMenuOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-    const handleHashChange = () => setIsDrawerOpen(false);
+    const handleHashChange = () => setIsMenuOpen(false);
     const handleResize = () => {
       if (window.innerWidth >= DESKTOP_BREAKPOINT) {
-        setIsDrawerOpen(false);
+        setIsMenuOpen(false);
       }
     };
 
@@ -67,136 +124,145 @@ export default function LandingNav({
   }, []);
 
   useEffect(() => {
-    if (!isDrawerOpen) {
+    if (!isMenuOpen) {
       return;
     }
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsDrawerOpen(false);
+        setIsMenuOpen(false);
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isDrawerOpen]);
+  }, [isMenuOpen]);
 
   useEffect(() => {
-    document.body.classList.toggle("landing-nav-open", isDrawerOpen);
+    document.body.classList.toggle("landing-nav-open", isMenuOpen);
 
     return () => {
       document.body.classList.remove("landing-nav-open");
     };
-  }, [isDrawerOpen]);
+  }, [isMenuOpen]);
 
-  const headerClassName = [
-    "landing-nav",
-    isScrolled ? "is-scrolled" : "",
-    isDrawerOpen ? "is-open" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  useEffect(() => {
+    if (!activeNotice || bannerDismissed || isScrolled || announcementItems.length < 2) {
+      return;
+    }
 
-  const closeDrawer = () => setIsDrawerOpen(false);
+    const interval = window.setInterval(() => {
+      setNoticeIndex((current) => (current + 1) % announcementItems.length);
+    }, Math.max(activeNotice.rotationIntervalMs ?? 6000, 2000));
+
+    return () => window.clearInterval(interval);
+  }, [activeNotice, announcementItems.length, bannerDismissed, isScrolled]);
+
+  const showBanner = Boolean(activeNotice) && !bannerDismissed && !isScrolled;
+
+  const closeMenu = () => setIsMenuOpen(false);
+  const headerClassName = isScrolled ? "landing-header is-scrolled" : "landing-header";
 
   return (
     <>
-      <header className={headerClassName} data-scrolled={isScrolled}>
-        <div className="landing-nav-inner">
-          <Link href="#home" className="landing-nav-brand" onClick={closeDrawer}>
-            <Image src={logoPath} alt={brandName} width={48} height={48} priority className="landing-nav-logo" />
-            <div className="landing-nav-brand-copy">
-              <p className="landing-nav-brand-title">{brandName}</p>
-              <p className="landing-nav-brand-tagline">{brandTagline}</p>
-            </div>
-          </Link>
-
-          <nav className="landing-nav-links" aria-label="Primary navigation">
-            {secondaryLinks.map((item) => (
-              <Link key={item.label} href={item.href} className="landing-nav-link">
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="landing-nav-actions">
-            {primaryLink ? (
-              <Link href={primaryLink.href} className="landing-nav-cta">
-                {primaryLink.label}
-              </Link>
-            ) : null}
-
-            <button
-              type="button"
-              className="landing-nav-toggle"
-              aria-expanded={isDrawerOpen}
-              aria-controls="landing-nav-drawer"
-              aria-label={isDrawerOpen ? "Close navigation menu" : "Open navigation menu"}
-              onClick={() => setIsDrawerOpen((current) => !current)}
-            >
-              <span />
-              <span />
-              <span />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <div className={isDrawerOpen ? "landing-nav-drawer-shell is-open" : "landing-nav-drawer-shell"}>
+      {bannerDismissed && !isScrolled && announcementItems.length > 0 ? (
         <button
           type="button"
-          className="landing-nav-backdrop"
-          aria-label="Close navigation overlay"
-          onClick={closeDrawer}
-        />
-
-        <aside
-          id="landing-nav-drawer"
-          className="landing-nav-drawer"
-          aria-label="Mobile navigation"
-          aria-modal="true"
-          role="dialog"
+          className="landing-banner-reopen"
+          onClick={() => setBannerDismissed(false)}
+          aria-label="Show announcement banner"
         >
-          <div className="landing-nav-drawer-head">
-            <Link href="#home" className="landing-nav-brand landing-nav-drawer-brand" onClick={closeDrawer}>
-              <Image src={logoPath} alt={brandName} width={44} height={44} className="landing-nav-logo" />
-              <div className="landing-nav-brand-copy">
-                <p className="landing-nav-brand-title">{brandName}</p>
-                <p className="landing-nav-brand-tagline">{brandTagline}</p>
+          <span>Announcements</span>
+        </button>
+      ) : null}
+
+      <header className={headerClassName}>
+        {showBanner ? (
+          <div className="landing-banner" role="region" aria-label="Site announcements">
+            <div className="landing-banner-inner">
+              <div className="landing-banner-copy">
+                {activeNotice?.title ? <span className="landing-banner-title">{activeNotice.title}</span> : null}
+                <span className="landing-banner-message">{activeNotice?.message}</span>
               </div>
+
+              <div className="landing-banner-actions">
+                {activeNotice?.ctaLabel && activeNotice?.ctaHref ? (
+                  <Link href={activeNotice.ctaHref} className="landing-banner-cta">
+                    {activeNotice.ctaLabel}
+                  </Link>
+                ) : null}
+
+                {activeNotice?.dismissible !== false ? (
+                  <button
+                    type="button"
+                    className="landing-banner-close"
+                    aria-label="Dismiss announcement banner"
+                    onClick={() => setBannerDismissed(true)}
+                  >
+                    <CloseIcon />
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="landing-nav-wrap">
+          <div className="landing-nav-shell">
+            <Link href="#home" className="landing-nav-brand" onClick={closeMenu}>
+              <Image src={logoPath} alt={brandName} width={32} height={32} priority className="landing-nav-logo" />
+              <span className="landing-nav-brand-label">{brandName}</span>
             </Link>
 
-            <button
-              type="button"
-              className="landing-nav-close"
-              aria-label="Close navigation menu"
-              onClick={closeDrawer}
-            >
-              <span />
-              <span />
-            </button>
-          </div>
+            <nav className="landing-nav-links" aria-label="Primary navigation">
+              {navLinks.map((item) => (
+                <Link key={item.label} href={item.href} className="landing-nav-link">
+                  {item.label}
+                </Link>
+              ))}
+              <Link href={storeUrl} className="landing-nav-store-link" aria-label="Open store">
+                <StoreIcon />
+              </Link>
+            </nav>
 
-          <nav className="landing-nav-drawer-links" aria-label="Mobile primary navigation">
-            {secondaryLinks.map((item) => (
-              <Link key={item.label} href={item.href} className="landing-nav-drawer-link" onClick={closeDrawer}>
+            <div className="landing-nav-mobile-actions">
+              <Link href={storeUrl} className="landing-nav-store-link" aria-label="Open store">
+                <StoreIcon />
+              </Link>
+              <button
+                type="button"
+                className="landing-nav-toggle"
+                aria-expanded={isMenuOpen}
+                aria-controls="landing-mobile-menu"
+                aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+                onClick={() => setIsMenuOpen((current) => !current)}
+              >
+                {isMenuOpen ? <CloseIcon /> : <MenuIcon />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className={isMenuOpen ? "landing-mobile-menu-shell is-open" : "landing-mobile-menu-shell"}>
+          <button
+            type="button"
+            className="landing-mobile-menu-backdrop"
+            aria-label="Close navigation menu"
+            onClick={closeMenu}
+          />
+
+          <nav id="landing-mobile-menu" className="landing-mobile-menu" aria-label="Mobile navigation">
+            {navLinks.map((item) => (
+              <Link key={item.label} href={item.href} className="landing-mobile-menu-link" onClick={closeMenu}>
                 {item.label}
               </Link>
             ))}
-          </nav>
-
-          <div className="landing-nav-drawer-actions">
-            {primaryLink ? (
-              <Link href={primaryLink.href} className="landing-nav-drawer-cta" onClick={closeDrawer}>
-                {primaryLink.label}
-              </Link>
-            ) : null}
-            <Link href="/contact" className="landing-nav-drawer-secondary" onClick={closeDrawer}>
-              Contact support
+            <Link href={storeUrl} className="landing-mobile-menu-link landing-mobile-menu-store" onClick={closeMenu}>
+              Store
             </Link>
-          </div>
-        </aside>
-      </div>
+          </nav>
+        </div>
+      </header>
     </>
   );
 }
