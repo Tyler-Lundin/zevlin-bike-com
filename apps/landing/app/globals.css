@@ -3305,10 +3305,9 @@ body {
 }
 
 .landing-banner-inner {
-  max-width: 1240px;
-  margin: 0 auto;
+  width: 100%;
   min-height: 2.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem clamp(1rem, 2.6vw, 2.4rem);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3351,7 +3350,7 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 0.5rem;
-  transition: background 0.2s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .landing-banner-cta {
@@ -3371,6 +3370,14 @@ body {
   width: 1.9rem;
   height: 1.9rem;
   color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.landing-banner-close:hover {
+  background: rgba(22, 22, 22, 0.28);
+  border-color: rgba(255, 255, 255, 0.38);
 }
 
 .landing-banner-reopen {
@@ -3400,10 +3407,9 @@ body {
 }
 
 .landing-nav-shell {
-  max-width: 1240px;
-  margin: 0 auto;
+  width: 100%;
   min-height: 5rem;
-  padding: 0 1rem;
+  padding: 0 clamp(1rem, 2.6vw, 2.4rem);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -3610,9 +3616,8 @@ body {
 .old-hero-inner {
   position: relative;
   z-index: 5;
-  width: min(1240px, 100%);
-  margin: 0 auto;
-  padding: 0 1rem 4rem;
+  width: 100%;
+  padding: 0 clamp(1rem, 3vw, 2.75rem) 4rem;
   display: flex;
   align-items: center;
   justify-content: center;
