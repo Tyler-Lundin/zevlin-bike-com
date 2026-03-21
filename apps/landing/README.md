@@ -2,6 +2,11 @@
 
 Purpose: Landing application in the Zevlin monorepo.
 
+## Deployment
+
+- Source of truth: `docs/operations/deployment/landing.md`
+- Shared Coolify and Nixpacks rules: `docs/operations/deployment/shared-conventions.md`
+
 ## Commands
 
 - `pnpm --filter @zevlin/landing dev`

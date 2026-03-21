@@ -2,6 +2,11 @@
 
 Purpose: Wholesale, retail, and partnership inquiry surface for Zevlin.
 
+## Deployment
+
+- Source of truth: `docs/operations/deployment/b2b.md`
+- Shared Coolify and Nixpacks rules: `docs/operations/deployment/shared-conventions.md`
+
 ## Commands
 
 - `pnpm --filter @zevlin/b2b dev`
