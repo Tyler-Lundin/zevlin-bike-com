@@ -90,7 +90,7 @@ export default function LandingNav({
   const [bannerDismissed, setBannerDismissed] = useState(false);
   const [noticeIndex, setNoticeIndex] = useState(0);
 
-  const activeNotice = announcementItems[noticeIndex] ?? null;
+  const currentNotice = announcementItems[noticeIndex] ?? announcementItems[0] ?? null;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -147,25 +147,34 @@ export default function LandingNav({
   }, [isMenuOpen]);
 
   useEffect(() => {
-    if (!activeNotice || bannerDismissed || isScrolled || announcementItems.length < 2) {
+    if (!currentNotice || bannerDismissed || isScrolled || announcementItems.length < 2) {
       return;
     }
 
     const interval = window.setInterval(() => {
       setNoticeIndex((current) => (current + 1) % announcementItems.length);
-    }, Math.max(activeNotice.rotationIntervalMs ?? 6000, 2000));
+    }, Math.max(currentNotice.rotationIntervalMs ?? 6000, 2000));
 
     return () => window.clearInterval(interval);
-  }, [activeNotice, announcementItems.length, bannerDismissed, isScrolled]);
+  }, [currentNotice, announcementItems.length, bannerDismissed, isScrolled]);
 
-  const showBanner = Boolean(activeNotice) && !bannerDismissed && !isScrolled;
+  const hasBanner = Boolean(currentNotice);
+  const isBannerVisible = hasBanner && !bannerDismissed && !isScrolled;
+  const shouldShowReopen = hasBanner && bannerDismissed && !isScrolled;
 
   const closeMenu = () => setIsMenuOpen(false);
-  const headerClassName = isScrolled ? "landing-header is-scrolled" : "landing-header";
+  const headerClassName = [
+    "landing-header",
+    isScrolled ? "is-scrolled" : null,
+    hasBanner ? "has-banner" : null,
+    hasBanner ? (isBannerVisible ? "is-banner-visible" : "is-banner-hidden") : null,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <>
-      {bannerDismissed && !isScrolled && announcementItems.length > 0 ? (
+      {shouldShowReopen ? (
         <button
           type="button"
           className="landing-banner-reopen"
@@ -177,22 +186,27 @@ export default function LandingNav({
       ) : null}
 
       <header className={headerClassName}>
-        {showBanner ? (
-          <div className="landing-banner" role="region" aria-label="Site announcements">
+        {hasBanner ? (
+          <div
+            className={isBannerVisible ? "landing-banner is-visible" : "landing-banner is-hidden"}
+            role="region"
+            aria-label="Site announcements"
+            aria-hidden={!isBannerVisible}
+          >
             <div className="landing-banner-inner">
               <div className="landing-banner-copy">
-                {activeNotice?.title ? <span className="landing-banner-title">{activeNotice.title}</span> : null}
-                <span className="landing-banner-message">{activeNotice?.message}</span>
+                {currentNotice?.title ? <span className="landing-banner-title">{currentNotice.title}</span> : null}
+                <span className="landing-banner-message">{currentNotice?.message}</span>
               </div>
 
               <div className="landing-banner-actions">
-                {activeNotice?.ctaLabel && activeNotice?.ctaHref ? (
-                  <Link href={activeNotice.ctaHref} className="landing-banner-cta">
-                    {activeNotice.ctaLabel}
+                {currentNotice?.ctaLabel && currentNotice?.ctaHref ? (
+                  <Link href={currentNotice.ctaHref} className="landing-banner-cta">
+                    {currentNotice.ctaLabel}
                   </Link>
                 ) : null}
 
-                {activeNotice?.dismissible !== false ? (
+                {currentNotice?.dismissible !== false ? (
                   <button
                     type="button"
                     className="landing-banner-close"

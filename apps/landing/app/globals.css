@@ -3290,18 +3290,40 @@ body {
 
 /* Landing hero/header rollback to old_website style */
 .landing-header {
+  --landing-header-duration: 320ms;
+  --landing-header-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --landing-banner-expanded-height: 3.5rem;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 100;
-  transition: all 0.45s ease;
+  transition: transform var(--landing-header-duration) var(--landing-header-ease);
 }
 
 .landing-banner {
   background: linear-gradient(90deg, #c51f1f 0%, #da3434 52%, #a51515 100%);
   color: #fff;
   box-shadow: 0 10px 24px -20px rgba(0, 0, 0, 0.45);
+  max-height: var(--landing-banner-expanded-height);
+  overflow: clip;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition:
+    max-height var(--landing-header-duration) var(--landing-header-ease),
+    opacity 220ms ease,
+    transform var(--landing-header-duration) var(--landing-header-ease),
+    box-shadow var(--landing-header-duration) var(--landing-header-ease);
+  will-change: max-height, opacity, transform;
+}
+
+.landing-banner.is-hidden {
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-0.35rem);
+  box-shadow: none;
+  pointer-events: none;
 }
 
 .landing-banner-inner {
@@ -3312,6 +3334,19 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    padding var(--landing-header-duration) var(--landing-header-ease),
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.landing-header.is-banner-hidden .landing-banner-inner {
+  padding-top: 0;
+  padding-bottom: 0;
+  opacity: 0;
+  transform: translateY(-0.2rem);
 }
 
 .landing-banner-copy {
@@ -3399,11 +3434,19 @@ body {
 
 .landing-nav-wrap {
   padding: 0;
-  transition: padding 0.45s ease;
+  transform: translateY(0);
+  transition:
+    padding var(--landing-header-duration) var(--landing-header-ease),
+    transform var(--landing-header-duration) var(--landing-header-ease);
+  will-change: padding, transform;
 }
 
 .landing-header.is-scrolled .landing-nav-wrap {
   padding: 0.75rem;
+}
+
+.landing-header.is-banner-hidden .landing-nav-wrap {
+  transform: translateY(-0.2rem);
 }
 
 .landing-nav-shell {
@@ -3416,7 +3459,11 @@ body {
   gap: 1rem;
   background: #000;
   border: 1px solid transparent;
-  transition: min-height 0.45s ease, border-radius 0.45s ease, padding 0.45s ease;
+  transition:
+    min-height var(--landing-header-duration) var(--landing-header-ease),
+    border-radius var(--landing-header-duration) var(--landing-header-ease),
+    padding var(--landing-header-duration) var(--landing-header-ease),
+    border-color var(--landing-header-duration) var(--landing-header-ease);
 }
 
 .landing-header.is-scrolled .landing-nav-shell {
@@ -3857,6 +3904,10 @@ body {
     padding: 0.5rem;
   }
 
+  .landing-header.is-banner-hidden .landing-nav-wrap {
+    transform: translateY(-0.1rem);
+  }
+
   .landing-nav-shell {
     min-height: 4.5rem;
   }
@@ -3907,6 +3958,8 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .landing-header,
+  .landing-banner,
+  .landing-banner-inner,
   .landing-nav-wrap,
   .landing-nav-shell,
   .landing-nav-brand,
